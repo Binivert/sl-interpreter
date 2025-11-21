@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+    <title>Translator</title>
+</head>
+<body>
+    <div class="container">
+        <h1>SIGN LANGUAGE TRANSLATOR</h1>
+        
+        <select id="modelSelect">
+            <option value="Model 1">Model 1</option>
+            <option value="Model 2">Model 2</option>
+            <option value="Model 3">Model 3</option>
+            <option value="Model 4">Model 4</option>
+        </select>
+        
+        <div id="demos" class="invisible">
+            <div class="videoView">
+                <button id="webcamButton" class="mdc-button mdc-button--raised">
+                    <span class="mdc-button__ripple" style="background-color: #01e6da; "></span>
+                    <span class="mdc-button__label" style="color: #000000;">Enable Webcam</span>
+                </button>
+                <div class="loading-message" id="loadingMessage">Loading gesture recognizer...</div>
+                <div style="position: relative;">
+                    <video id="webcam" autoplay playsinline></video>
+                    <canvas class="output_canvas" id="output_canvas" width="1280" height="720" style="position: absolute; left: 0; top: 0;"></canvas>
+                    <p id='gesture_output' class="output"></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="detected-words-box">
+            <h3>Sentence</h3>
+            <p id="detectedText">The detected sign language words will appear here</p>
+        </div>
+
+        <button id="copyButton" class="copy-button">Copy Text</button>
+        <div class="loader" id="loader"></div>
+    </div>
+    
+    <script type="module" src="script.js"></script>
+</body>
+</html>
