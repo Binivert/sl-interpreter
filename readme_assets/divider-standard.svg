@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 20">
+  <defs>
+    <linearGradient id="divStd" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00f0ff;stop-opacity:0"/>
+      <stop offset="50%" style="stop-color:#bf5fff;stop-opacity:0.6"/>
+      <stop offset="100%" style="stop-color:#ff3d7f;stop-opacity:0"/>
+    </linearGradient>
+  </defs>
+  <style>
+    @keyframes pulse { 0%,100%{opacity:0.5} 50%{opacity:1} }
+    .divPulse { animation: pulse 2s ease-in-out infinite; }
+  </style>
+  <line x1="0" y1="10" x2="800" y2="10" stroke="url(#divStd)" stroke-width="1"/>
+  <circle cx="400" cy="10" r="3" fill="#bf5fff" class="divPulse"/>
+</svg>

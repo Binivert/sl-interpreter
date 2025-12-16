@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 24">
+  <defs>
+    <linearGradient id="divGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00f0ff;stop-opacity:0"/>
+      <stop offset="50%" style="stop-color:#00f0ff;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#00f0ff;stop-opacity:0"/>
+    </linearGradient>
+    <filter id="glowFilter">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <style>
+    @keyframes glow { 0%,100%{opacity:0.6} 50%{opacity:1} }
+    .glowLine { animation: glow 2s ease-in-out infinite; }
+  </style>
+  <line x1="100" y1="12" x2="700" y2="12" stroke="url(#divGlow)" stroke-width="2" filter="url(#glowFilter)" class="glowLine"/>
+  <circle cx="100" cy="12" r="4" fill="#00f0ff" filter="url(#glowFilter)"/>
+  <circle cx="700" cy="12" r="4" fill="#00f0ff" filter="url(#glowFilter)"/>
+</svg>
