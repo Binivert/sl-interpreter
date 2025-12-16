@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="trainGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00ffff"/>
+      <stop offset="100%" style="stop-color:#a855f7"/>
+    </linearGradient>
+  </defs>
+  <style>
+    @keyframes rotate { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+    @keyframes pulse { 0%,100%{opacity:0.6} 50%{opacity:1} }
+    .rotate { animation: rotate 3s linear infinite; transform-origin: center; }
+    .pulse { animation: pulse 1.5s ease-in-out infinite; }
+  </style>
+  <g class="rotate">
+    <circle cx="16" cy="16" r="10" fill="none" stroke="url(#trainGrad)" stroke-width="2" stroke-dasharray="8 4"/>
+  </g>
+  <circle cx="16" cy="16" r="5" fill="#0f172a" stroke="#a855f7" stroke-width="1.5"/>
+  <circle cx="16" cy="16" r="2" fill="#a855f7" class="pulse"/>
+  <circle cx="16" cy="5" r="2" fill="#00ffff" class="pulse"/>
+  <circle cx="26" cy="12" r="2" fill="#00ffff" class="pulse" style="animation-delay:0.3s"/>
+  <circle cx="26" cy="22" r="2" fill="#a855f7" class="pulse" style="animation-delay:0.6s"/>
+  <circle cx="6" cy="22" r="2" fill="#a855f7" class="pulse" style="animation-delay:0.9s"/>
+  <circle cx="6" cy="12" r="2" fill="#00ffff" class="pulse" style="animation-delay:1.2s"/>
+</svg>
