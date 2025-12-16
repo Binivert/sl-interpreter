@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
+  <style>
+    @keyframes grow { 0%{height:4px} 50%{height:12px} 100%{height:4px} }
+    .bar1 { animation: grow 1s ease-in-out infinite; }
+    .bar2 { animation: grow 1s ease-in-out 0.2s infinite; }
+    .bar3 { animation: grow 1s ease-in-out 0.4s infinite; }
+  </style>
+  <rect x="5" y="16" width="4" height="4" fill="#ff3d7f" class="bar1"/>
+  <rect x="10" y="12" width="4" height="8" fill="#ff3d7f" class="bar2"/>
+  <rect x="15" y="8" width="4" height="12" fill="#ff3d7f" class="bar3"/>
+  <path d="M3 20 L21 20" stroke="#ff3d7f" stroke-width="1.5"/>
+</svg>

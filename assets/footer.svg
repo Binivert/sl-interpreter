@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 180">
+  <defs>
+    <linearGradient id="footBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0f"/>
+      <stop offset="100%" style="stop-color:#0d0d14"/>
+    </linearGradient>
+    <linearGradient id="footLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00f0ff;stop-opacity:0"/>
+      <stop offset="50%" style="stop-color:#bf5fff;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#ff3d7f;stop-opacity:0"/>
+    </linearGradient>
+    <filter id="footGlow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  
+  <style>
+    @keyframes shutdown { 0%{opacity:1} 20%{opacity:0.2} 40%{opacity:0.8} 60%{opacity:0.3} 80%{opacity:0.9} 100%{opacity:1} }
+    @keyframes cursor { 0%,100%{opacity:1} 50%{opacity:0} }
+    @keyframes scanDown { 0%{transform:translateY(-100%)} 100%{transform:translateY(200%)} }
+    .shutdownText { animation: shutdown 4s ease-in-out infinite; }
+    .cursorBlink { animation: cursor 1s step-end infinite; }
+    .scanLine { animation: scanDown 3s linear infinite; }
+  </style>
+  
+  <rect width="800" height="180" fill="url(#footBg)"/>
+  
+  <!-- Top line -->
+  <rect x="0" y="0" width="800" height="2" fill="url(#footLine)"/>
+  
+  <!-- Scan effect -->
+  <rect class="scanLine" x="0" y="0" width="800" height="2" fill="url(#footLine)" opacity="0.3"/>
+  
+  <!-- Grid background -->
+  <g stroke="#1a1a2e" stroke-width="0.5" opacity="0.3">
+    <line x1="0" y1="45" x2="800" y2="45"/>
+    <line x1="0" y1="90" x2="800" y2="90"/>
+    <line x1="0" y1="135" x2="800" y2="135"/>
+    <line x1="200" y1="0" x2="200" y2="180"/>
+    <line x1="400" y1="0" x2="400" y2="180"/>
+    <line x1="600" y1="0" x2="600" y2="180"/>
+  </g>
+  
+  <!-- Terminal frame -->
+  <rect x="150" y="25" width="500" height="130" rx="6" fill="#0a0a0f" stroke="#2a2a3e" stroke-width="1"/>
+  
+  <!-- Terminal header -->
+  <rect x="150" y="25" width="500" height="24" rx="6" fill="#1a1a2e"/>
+  <rect x="150" y="43" width="500" height="6" fill="#1a1a2e"/>
+  <circle cx="168" cy="37" r="5" fill="#ff5f57"/>
+  <circle cx="186" cy="37" r="5" fill="#febc2e"/>
+  <circle cx="204" cy="37" r="5" fill="#28c840"/>
+  <text x="400" y="41" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#5a6270">SLIS — Session Complete</text>
+  
+  <!-- Terminal content -->
+  <g font-family="'Courier New', monospace" font-size="11">
+    <text x="170" y="72" fill="#00ff88">$</text>
+    <text x="185" y="72" fill="#8892a0">echo "Session terminated successfully"</text>
+    
+    <text x="170" y="92" fill="#5a6270" class="shutdownText">[SHUTDOWN]</text>
+    <text x="260" y="92" fill="#8892a0">System offline</text>
+    
+    <text x="170" y="116" fill="#bf5fff">Developed with passion by</text>
+    <text x="370" y="116" fill="#00f0ff" filter="url(#footGlow)">Biniyam Bonger</text>
+    
+    <text x="170" y="136" fill="#5a6270">Open to collaboration</text>
+    <text x="340" y="136" fill="#5a6270">•</text>
+    <text x="360" y="136" fill="#ffc107">★ Star this repo if it helped you</text>
+  </g>
+  
+  <!-- Blinking cursor -->
+  <rect x="605" y="126" width="8" height="14" fill="#00f0ff" class="cursorBlink"/>
+  
+  <!-- Corner decorations -->
+  <g stroke="#bf5fff" stroke-width="1" fill="none" opacity="0.5">
+    <path d="M10 20 L10 10 L20 10"/>
+    <path d="M780 10 L790 10 L790 20"/>
+    <path d="M10 160 L10 170 L20 170"/>
+    <path d="M780 170 L790 170 L790 160"/>
+  </g>
+  
+  <!-- Status indicators -->
+  <g transform="translate(30, 165)">
+    <circle cx="0" cy="0" r="3" fill="#ff3d7f"/>
+    <text x="10" y="4" font-family="monospace" font-size="8" fill="#5a6270">OFFLINE</text>
+  </g>
+  <g transform="translate(720, 165)">
+    <text x="0" y="4" font-family="monospace" font-size="8" fill="#5a6270">v1</text>
+  </g>
+</svg>

@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+  <defs>
+    <linearGradient id="uiBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0e17"/>
+      <stop offset="100%" style="stop-color:#0d1219"/>
+    </linearGradient>
+    <filter id="uiGlow">
+      <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <rect width="800" height="450" fill="url(#uiBg)"/>
+  
+  <text x="400" y="25" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="16" font-weight="700" fill="#ec4899" filter="url(#uiGlow)">UI LAYOUT STRUCTURE</text>
+  
+  <!-- Main container -->
+  <g transform="translate(50, 40)">
+    <rect width="700" height="400" rx="8" fill="none" stroke="#1e293b" stroke-width="2"/>
+    
+    <!-- Header -->
+    <rect x="5" y="5" width="690" height="35" rx="4" fill="#0d1219" stroke="#00d4ff" stroke-width="1"/>
+    <text x="20" y="27" font-family="'Consolas', monospace" font-size="10" fill="#00d4ff">HEADER</text>
+    <text x="350" y="27" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#64748b">Logo • Status Badges • FPS Counter</text>
+    
+    <!-- Left Panel -->
+    <rect x="5" y="45" width="400" height="310" rx="4" fill="#0d1219" stroke="#a855f7" stroke-width="1"/>
+    <text x="20" y="65" font-family="'Consolas', monospace" font-size="10" fill="#a855f7">LEFT PANEL (Resizable)</text>
+    
+    <!-- Recognition Display -->
+    <rect x="15" y="75" width="380" height="50" rx="3" fill="#111827" stroke="#1e293b" stroke-width="1"/>
+    <text x="25" y="95" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#64748b">Recognition Display</text>
+    <text x="25" y="115" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#94a3b8">Gesture Icon • Name • Confidence • Sentence</text>
+    
+    <!-- Video Container -->
+    <rect x="15" y="130" width="380" height="180" rx="3" fill="#000" stroke="#1e293b" stroke-width="1"/>
+    <text x="205" y="220" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="12" fill="#64748b">VIDEO + CANVAS OVERLAY</text>
+    
+    <!-- Camera Controls -->
+    <rect x="15" y="315" width="380" height="30" rx="3" fill="#111827" stroke="#1e293b" stroke-width="1"/>
+    <text x="25" y="335" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#64748b">Camera Controls: Start • Stop • Select • Skeleton • Mirror</text>
+    
+    <!-- Resizer -->
+    <rect x="410" y="45" width="8" height="310" rx="2" fill="#1e293b" stroke="#a855f7" stroke-width="1"/>
+    <text x="414" y="200" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#a855f7" transform="rotate(90, 414, 200)">RESIZER</text>
+    
+    <!-- Right Panel -->
+    <rect x="423" y="45" width="272" height="310" rx="4" fill="#0d1219" stroke="#22c55e" stroke-width="1"/>
+    <text x="438" y="65" font-family="'Consolas', monospace" font-size="10" fill="#22c55e">RIGHT PANEL (Scrollable)</text>
+    
+    <!-- Modules Card -->
+    <rect x="433" y="75" width="252" height="80" rx="3" fill="#111827" stroke="#1e293b" stroke-width="1"/>
+    <text x="443" y="90" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#64748b">📦 Modules Card</text>
+    <text x="443" y="105" font-family="'Segoe UI', Arial, sans-serif" font-size="7" fill="#94a3b8">Tabs: Loaded | Training</text>
+    <text x="443" y="120" font-family="'Segoe UI', Arial, sans-serif" font-size="7" fill="#94a3b8">Module List / Training Interface</text>
+    
+    <!-- Voice Card -->
+    <rect x="433" y="160" width="252" height="60" rx="3" fill="#111827" stroke="#1e293b" stroke-width="1"/>
+    <text x="443" y="175" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#64748b">🔊 Voice Card</text>
+    <text x="443" y="190" font-family="'Segoe UI', Arial, sans-serif" font-size="7" fill="#94a3b8">Voice Select • Rate • Auto-speak</text>
+    
+    <!-- Settings Card -->
+    <rect x="433" y="225" width="252" height="80" rx="3" fill="#111827" stroke="#1e293b" stroke-width="1"/>
+    <text x="443" y="240" font-family="'Segoe UI', Arial, sans-serif" font-size="8" fill="#64748b">⚙️ Settings Card</text>
+    <text x="443" y="255" font-family="'Segoe UI', Arial, sans-serif" font-size="7" fill="#94a3b8">Threshold • Debounce • Sensitivity</text>
+    <text x="443" y="270" font-family="'Segoe UI', Arial, sans-serif" font-size="7" fill="#94a3b8">Smoothing • Max Hands</text>
+    
+    <!-- Debug Panel -->
+    <rect x="5" y="360" width="690" height="35" rx="4" fill="#0d1219" stroke="#eab308" stroke-width="1"/>
+    <text x="20" y="382" font-family="'Consolas', monospace" font-size="10" fill="#eab308">DEBUG PANEL (Collapsible)</text>
+    <text x="350" y="382" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#64748b">Stats • Logs • Controls</text>
+  </g>
+</svg>

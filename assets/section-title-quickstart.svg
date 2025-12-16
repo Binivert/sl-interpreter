@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 60">
+  <defs>
+    <linearGradient id="titleGrad15" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#22c55e"/>
+      <stop offset="100%" style="stop-color:#00d4ff"/>
+    </linearGradient>
+    <linearGradient id="underlineGrad15" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#22c55e;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#22c55e;stop-opacity:0"/>
+    </linearGradient>
+    <filter id="titleGlow15">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <g transform="translate(20, 30)">
+    <polygon points="-4,-10 12,0 -4,10" fill="#22c55e" filter="url(#titleGlow15)"/>
+  </g>
+  
+  <text x="50" y="38" font-family="'Segoe UI', Arial, sans-serif" font-size="24" font-weight="700" fill="url(#titleGrad15)" filter="url(#titleGlow15)">QUICK START</text>
+  
+  <line x1="50" y1="48" x2="200" y2="48" stroke="url(#underlineGrad15)" stroke-width="2" filter="url(#titleGlow15)"/>
+  
+  <circle cx="210" cy="48" r="2" fill="#22c55e"/>
+  <circle cx="220" cy="48" r="2" fill="#00d4ff" opacity="0.7"/>
+  <circle cx="230" cy="48" r="2" fill="#a855f7" opacity="0.4"/>
+</svg>

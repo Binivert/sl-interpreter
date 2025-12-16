@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
+  <style>
+    @keyframes rotate { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+    .modRotate { animation: rotate 8s linear infinite; transform-origin: center; }
+  </style>
+  <g class="modRotate">
+    <rect x="8" y="3" width="8" height="8" rx="2" fill="none" stroke="#ffc107" stroke-width="1.5"/>
+    <rect x="3" y="13" width="8" height="8" rx="2" fill="none" stroke="#ffc107" stroke-width="1.5"/>
+    <rect x="13" y="13" width="8" height="8" rx="2" fill="none" stroke="#ffc107" stroke-width="1.5"/>
+  </g>
+  <line x1="12" y1="11" x2="7" y2="13" stroke="#ffc107" stroke-width="1"/>
+  <line x1="12" y1="11" x2="17" y2="13" stroke="#ffc107" stroke-width="1"/>
+</svg>

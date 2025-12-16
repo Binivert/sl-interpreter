@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 280">
+  <defs>
+    <linearGradient id="compBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0f"/>
+      <stop offset="100%" style="stop-color:#0d0d14"/>
+    </linearGradient>
+    <filter id="compGlow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  
+  <style>
+    @keyframes pulse { 0%,100%{opacity:0.6} 50%{opacity:1} }
+    @keyframes connFlow { 0%{stroke-dashoffset:20} 100%{stroke-dashoffset:0} }
+    .compPulse { animation: pulse 2s ease-in-out infinite; }
+    .connLine { animation: connFlow 2s linear infinite; stroke-dasharray: 10 10; }
+  </style>
+  
+  <rect width="700" height="280" fill="url(#compBg)"/>
+  <rect width="700" height="280" fill="none" stroke="#1a1a2e" stroke-width="1"/>
+  
+  <text x="350" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#5a6270" letter-spacing="3">COMPONENT ARCHITECTURE</text>
+  
+  <!-- Main SLISApp -->
+  <g transform="translate(260, 50)" filter="url(#compGlow)">
+    <rect width="180" height="50" rx="6" fill="#0d0d14" stroke="#00f0ff" stroke-width="2"/>
+    <text x="90" y="30" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="14" fill="#00f0ff">SLISApp</text>
+    <text x="90" y="44" text-anchor="middle" font-family="monospace" font-size="8" fill="#5a6270">main controller</text>
+  </g>
+  
+  <!-- Connection lines from SLISApp -->
+  <line x1="300" y1="100" x2="120" y2="150" stroke="#3a3a4e" stroke-width="1" class="connLine"/>
+  <line x1="350" y1="100" x2="350" y2="150" stroke="#3a3a4e" stroke-width="1" class="connLine"/>
+  <line x1="400" y1="100" x2="580" y2="150" stroke="#3a3a4e" stroke-width="1" class="connLine"/>
+  
+  <!-- ModuleDB -->
+  <g transform="translate(40, 150)" class="compPulse">
+    <rect width="160" height="45" rx="5" fill="#0d0d14" stroke="#bf5fff" stroke-width="1.5"/>
+    <text x="80" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#bf5fff">ModuleDB</text>
+    <text x="80" y="38" text-anchor="middle" font-family="monospace" font-size="8" fill="#5a6270">IndexedDB wrapper</text>
+  </g>
+  
+  <!-- KNNClassifier -->
+  <g transform="translate(270, 150)" class="compPulse">
+    <rect width="160" height="45" rx="5" fill="#0d0d14" stroke="#ff3d7f" stroke-width="1.5"/>
+    <text x="80" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#ff3d7f">KNNClassifier</text>
+    <text x="80" y="38" text-anchor="middle" font-family="monospace" font-size="8" fill="#5a6270">k=5 nearest neighbors</text>
+  </g>
+  
+  <!-- FeatureExtractor -->
+  <g transform="translate(500, 150)" class="compPulse">
+    <rect width="160" height="45" rx="5" fill="#0d0d14" stroke="#00ff88" stroke-width="1.5"/>
+    <text x="80" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#00ff88">FeatureExtractor</text>
+    <text x="80" y="38" text-anchor="middle" font-family="monospace" font-size="8" fill="#5a6270">166-dim vectors</text>
+  </g>
+  
+  <!-- Lower connections -->
+  <line x1="120" y1="195" x2="120" y2="225" stroke="#3a3a4e" stroke-width="1" class="connLine"/>
+  <line x1="350" y1="195" x2="350" y2="225" stroke="#3a3a4e" stroke-width="1" class="connLine"/>
+  
+  <!-- IndexedDB -->
+  <g transform="translate(40, 225)">
+    <rect width="160" height="35" rx="4" fill="#1a1a2e" stroke="#3a3a4e" stroke-width="1"/>
+    <text x="80" y="22" text-anchor="middle" font-family="monospace" font-size="9" fill="#5a6270">IndexedDB Storage</text>
+  </g>
+  
+  <!-- Training Data -->
+  <g transform="translate(270, 225)">
+    <rect width="160" height="35" rx="4" fill="#1a1a2e" stroke="#3a3a4e" stroke-width="1"/>
+    <text x="80" y="22" text-anchor="middle" font-family="monospace" font-size="9" fill="#5a6270">Training Samples</text>
+  </g>
+  
+  <!-- MediaPipe external -->
+  <g transform="translate(500, 225)">
+    <rect width="160" height="35" rx="4" fill="#1a1a2e" stroke="#00f0ff" stroke-width="1" stroke-dasharray="4 2"/>
+    <text x="80" y="22" text-anchor="middle" font-family="monospace" font-size="9" fill="#00f0ff">MediaPipe WASM</text>
+  </g>
+</svg>

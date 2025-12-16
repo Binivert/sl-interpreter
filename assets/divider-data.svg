@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 40">
+  <defs>
+    <linearGradient id="dataGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#a855f7;stop-opacity:0"/>
+      <stop offset="50%" style="stop-color:#a855f7;stop-opacity:0.5"/>
+      <stop offset="100%" style="stop-color:#a855f7;stop-opacity:0"/>
+    </linearGradient>
+    <filter id="dataGlow">
+      <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Data stream pattern -->
+  <g stroke="#1e293b" stroke-width="1" fill="none">
+    <line x1="100" y1="20" x2="700" y2="20"/>
+  </g>
+  
+  <!-- Data points -->
+  <g fill="#a855f7" filter="url(#dataGlow)">
+    <rect x="180" y="16" width="8" height="8" rx="1"/>
+    <rect x="220" y="16" width="8" height="8" rx="1"/>
+    <rect x="300" y="16" width="8" height="8" rx="1"/>
+    <rect x="380" y="16" width="8" height="8" rx="1"/>
+    <rect x="420" y="16" width="8" height="8" rx="1"/>
+    <rect x="500" y="16" width="8" height="8" rx="1"/>
+    <rect x="580" y="16" width="8" height="8" rx="1"/>
+    <rect x="620" y="16" width="8" height="8" rx="1"/>
+  </g>
+  
+  <!-- Connecting lines -->
+  <g stroke="url(#dataGrad)" stroke-width="1">
+    <line x1="188" y1="20" x2="220" y2="20"/>
+    <line x1="228" y1="20" x2="300" y2="20"/>
+    <line x1="308" y1="20" x2="380" y2="20"/>
+    <line x1="388" y1="20" x2="420" y2="20"/>
+    <line x1="428" y1="20" x2="500" y2="20"/>
+    <line x1="508" y1="20" x2="580" y2="20"/>
+    <line x1="588" y1="20" x2="620" y2="20"/>
+  </g>
+</svg>
