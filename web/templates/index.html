@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLIS - Sign Language Interpretation System</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/theme.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+</head>
+<body class="theme-cyberpunk">
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-brand">
+                <span class="brand-icon">◈</span>
+                <span class="brand-name">SLIS</span>
+            </div>
+            <nav class="header-nav">
+                <a href="/" class="nav-link active">Live</a>
+                <a href="/training" class="nav-link">Train</a>
+                <a href="/settings" class="nav-link">Settings</a>
+            </nav>
+            <div class="header-status">
+                <span class="status-indicator status-connected"></span>
+                <span class="status-text">Connected</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Camera Section -->
+            <section class="camera-section">
+                <div class="camera-container">
+                    <video id="camera-feed" autoplay playsinline></video>
+                    <canvas id="landmark-overlay"></canvas>
+                    <div class="camera-controls">
+                        <button id="btn-toggle-camera" class="btn btn-icon" title="Toggle Camera">
+                            <span class="icon">📷</span>
+                        </button>
+                        <button id="btn-toggle-landmarks" class="btn btn-icon" title="Toggle Landmarks">
+                            <span class="icon">◉</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Subtitle Bar -->
+                <div class="subtitle-bar">
+                    <div class="subtitle-text" id="subtitle-text">Waiting for signs...</div>
+                </div>
+            </section>
+
+            <!-- Recognition Panel -->
+            <aside class="recognition-panel">
+                <div class="panel-section">
+                    <h2 class="panel-title">Recognized Sign</h2>
+                    <div class="recognition-display">
+                        <div class="sign-name" id="sign-name">—</div>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" id="confidence-fill" style="width: 0%"></div>
+                        </div>
+                        <div class="confidence-text" id="confidence-text">0%</div>
+                    </div>
+                    <button id="btn-speak" class="btn btn-primary btn-large">
+                        <span class="icon">🔊</span>
+                        <span>Speak</span>
+                    </button>
+                </div>
+
+                <div class="panel-section">
+                    <h2 class="panel-title">History</h2>
+                    <div class="history-list" id="history-list">
+                        <!-- History items will be added here -->
+                    </div>
+                    <button id="btn-clear-history" class="btn btn-secondary">
+                        Clear History
+                    </button>
+                </div>
+            </aside>
+        </main>
+
+        <!-- Status Bar -->
+        <footer class="status-bar">
+            <div class="status-item">
+                <span class="status-label">Model:</span>
+                <span class="status-value" id="status-model">ASL Base</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Voice:</span>
+                <span class="status-value" id="status-voice">Amy (EN)</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">FPS:</span>
+                <span class="status-value" id="status-fps">0</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Latency:</span>
+                <span class="status-value" id="status-latency">0ms</span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="/static/js/app.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+/* Cyberpunk Theme */
+
+.theme-cyberpunk {
+    /* Primary colors */
+    --bg-primary: #0a0e17;
+    --bg-secondary: #111827;
+    --surface-color: #1e293b;
+    
+    /* Accent colors */
+    --primary-accent: #00d4ff;
+    --secondary-accent: #7c3aed;
+    
+    /* Status colors */
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --error-color: #ef4444;
+    
+    /* Text colors */
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    
+    /* Border & hover states */
+    --border-color: #334155;
+    --bg-hover: rgba(0, 212, 255, 0.1);
+    --bg-active: rgba(0, 212, 255, 0.15);
+    
+    /* Shadows */
+    --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.3);
+    --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    
+    /* Apply to body */
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+/* Glassmorphism effects */
+.glass {
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Neon glow effects */
+.neon-border {
+    border: 1px solid var(--primary-accent);
+    box-shadow: 
+        0 0 5px var(--primary-accent),
+        inset 0 0 5px rgba(0, 212, 255, 0.1);
+}
+
+.neon-text {
+    color: var(--primary-accent);
+    text-shadow: 
+        0 0 5px var(--primary-accent),
+        0 0 10px var(--primary-accent),
+        0 0 20px var(--primary-accent);
+}
+
+/* Focus states */
+:focus {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 2px solid var(--primary-accent);
+    outline-offset: 2px;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}
+
+/* Selection */
+::selection {
+    background: var(--primary-accent);
+    color: var(--bg-primary);
+}
+
+/* High contrast mode */
+.high-contrast {
+    --text-primary: #ffffff;
+    --text-secondary: #e2e8f0;
+    --primary-accent: #00ffff;
+    --border-color: #475569;
+}

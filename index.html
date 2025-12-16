@@ -1,0 +1,2608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLIS - Sign Language Interpretation System</title>
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #0d1219;
+            --bg-card: #111827;
+            --bg-input: #1a2332;
+            --bg-hover: #1f2b3e;
+            --accent-cyan: #00d4ff;
+            --accent-purple: #a855f7;
+            --accent-pink: #ec4899;
+            --accent-green: #22c55e;
+            --accent-yellow: #eab308;
+            --accent-red: #ef4444;
+            --accent-orange: #f97316;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: #1e293b;
+            --border-glow: rgba(0, 212, 255, 0.3);
+            --glow-cyan: 0 0 20px rgba(0, 212, 255, 0.4);
+            --glow-purple: 0 0 20px rgba(168, 85, 247, 0.4);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            background-image: 
+                radial-gradient(ellipse at 10% 10%, rgba(0, 212, 255, 0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 90%, rgba(168, 85, 247, 0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(236, 72, 153, 0.02) 0%, transparent 50%);
+        }
+        
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-cyan); }
+        
+        .app {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        /* Animations */
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        @keyframes glow { 0%, 100% { box-shadow: var(--glow-cyan); } 50% { box-shadow: 0 0 30px rgba(0, 212, 255, 0.6); } }
+        @keyframes slideIn { from { transform: translateY(-10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+        
+        .animate-in { animation: slideIn 0.3s ease-out; }
+        .fade-in { animation: fadeIn 0.3s ease-out; }
+        
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background: linear-gradient(180deg, var(--bg-secondary) 0%, transparent 100%);
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: var(--glow-cyan);
+            animation: glow 3s ease-in-out infinite;
+        }
+        
+        .logo-text {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .logo-sub {
+            font-size: 9px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .header-badges {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: all 0.3s;
+        }
+        
+        .badge.active {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+        }
+        
+        .badge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--text-muted);
+        }
+        
+        .badge.active .dot {
+            background: var(--accent-cyan);
+            box-shadow: 0 0 8px var(--accent-cyan);
+            animation: pulse 2s infinite;
+        }
+        
+        /* Main Layout with Resizable Divider */
+        .main {
+            display: flex;
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+            padding: 12px;
+            gap: 0;
+        }
+        
+        .left-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 400px;
+            flex: 1;
+            padding-right: 12px;
+            overflow: hidden;
+        }
+        
+        /* Resizable Divider */
+        .divider {
+            width: 6px;
+            background: var(--border-color);
+            cursor: col-resize;
+            flex-shrink: 0;
+            border-radius: 3px;
+            transition: background 0.2s;
+            position: relative;
+        }
+        
+        .divider:hover, .divider.dragging {
+            background: var(--accent-cyan);
+            box-shadow: var(--glow-cyan);
+        }
+        
+        .divider::before {
+            content: '⋮';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        
+        .divider:hover::before, .divider.dragging::before {
+            color: var(--accent-cyan);
+        }
+        
+        .right-section {
+            width: 360px;
+            min-width: 280px;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-left: 12px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        
+        /* Recognition Display */
+        .recognition-display {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-shrink: 0;
+        }
+        
+        .current-gesture {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex: 1;
+        }
+        
+        .gesture-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(168, 85, 247, 0.15));
+            border: 2px solid var(--accent-cyan);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: var(--glow-cyan);
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+        
+        .gesture-icon.detected {
+            animation: glow 1s ease-in-out infinite;
+        }
+        
+        .gesture-info { flex: 1; min-width: 0; }
+        
+        .gesture-label {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+        
+        .gesture-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+            line-height: 1.1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: all 0.2s;
+        }
+        
+        .gesture-name.new {
+            animation: slideIn 0.2s ease-out;
+        }
+        
+        .gesture-confidence {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 6px;
+        }
+        
+        .confidence-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--bg-input);
+            border-radius: 4px;
+            overflow: hidden;
+            max-width: 150px;
+        }
+        
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+            border-radius: 4px;
+            transition: width 0.15s;
+            box-shadow: 0 0 10px var(--accent-cyan);
+        }
+        
+        .confidence-text {
+            font-size: 14px;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-cyan);
+            min-width: 45px;
+        }
+        
+        .sentence-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding-left: 20px;
+            border-left: 1px solid var(--border-color);
+            min-width: 0;
+        }
+        
+        .sentence-label {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+        }
+        
+        .sentence-text {
+            font-size: 15px;
+            color: var(--text-primary);
+            line-height: 1.3;
+            min-height: 40px;
+            max-height: 40px;
+            overflow-y: auto;
+        }
+        
+        .sentence-actions {
+            display: flex;
+            gap: 6px;
+        }
+        
+        /* Video Container */
+        .video-container {
+            flex: 1;
+            position: relative;
+            background: #000;
+            border-radius: 14px;
+            overflow: hidden;
+            min-height: 200px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .video-wrapper {
+            position: absolute;
+            inset: 0;
+        }
+        
+        #webcam {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .video-placeholder {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary));
+        }
+        
+        .video-placeholder .icon { font-size: 56px; opacity: 0.3; }
+        .video-placeholder .text { font-size: 13px; color: var(--text-muted); }
+        
+        .capture-flash {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 212, 255, 0.3);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.1s;
+        }
+        
+        .capture-flash.active { opacity: 1; }
+        
+        /* Camera Controls */
+        .camera-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+        
+        .camera-select-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .camera-select-group label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+        
+        .camera-select { flex: 1; max-width: 180px; }
+        
+        .control-divider {
+            width: 1px;
+            height: 24px;
+            background: var(--border-color);
+            margin: 0 4px;
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            flex-shrink: 0;
+            transition: border-color 0.3s;
+        }
+        
+        .card:hover {
+            border-color: rgba(0, 212, 255, 0.2);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .card-header h3 {
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .card-body {
+            padding: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .card-body.no-scroll {
+            max-height: none;
+            overflow: visible;
+        }
+        
+        /* Form Controls */
+        .form-row { margin-bottom: 10px; }
+        .form-row:last-child { margin-bottom: 0; }
+        
+        .form-row label {
+            display: block;
+            font-size: 10px;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .input, .select {
+            width: 100%;
+            padding: 8px 10px;
+            font-size: 12px;
+            font-family: inherit;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            transition: all 0.2s;
+        }
+        
+        .input:focus, .select:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.1);
+        }
+        
+        .input::placeholder { color: var(--text-muted); }
+        .input-sm { padding: 6px 8px; font-size: 11px; }
+        
+        /* Range */
+        .range-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .range-row input[type="range"] { flex: 1; }
+        
+        .range-row .value {
+            min-width: 40px;
+            text-align: right;
+            font-size: 11px;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-cyan);
+        }
+        
+        input[type="range"] {
+            -webkit-appearance: none;
+            height: 4px;
+            background: var(--bg-input);
+            border-radius: 2px;
+            cursor: pointer;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 8px var(--accent-cyan);
+            transition: transform 0.2s;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+        
+        /* Toggle */
+        .toggle {
+            position: relative;
+            width: 40px;
+            height: 22px;
+            flex-shrink: 0;
+        }
+        
+        .toggle input { opacity: 0; width: 0; height: 0; }
+        
+        .toggle-slider {
+            position: absolute;
+            inset: 0;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 11px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background: var(--text-muted);
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .toggle input:checked + .toggle-slider {
+            background: var(--accent-cyan);
+            border-color: var(--accent-cyan);
+            box-shadow: var(--glow-cyan);
+        }
+        
+        .toggle input:checked + .toggle-slider::before {
+            transform: translateX(18px);
+            background: white;
+        }
+        
+        /* Checkbox */
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 0;
+        }
+        
+        .checkbox-row label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            margin: 0;
+        }
+        
+        .checkbox {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        
+        .checkbox:checked {
+            background: var(--accent-cyan);
+            border-color: var(--accent-cyan);
+        }
+        
+        .checkbox:checked::after {
+            content: '✓';
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: var(--bg-primary);
+            height: 100%;
+        }
+        
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 500;
+            font-family: inherit;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            color: white;
+            border: none;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-input);
+            color: var(--text-primary);
+            border-color: var(--border-color);
+        }
+        
+        .btn-secondary:hover:not(:disabled) {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+        
+        .btn-success {
+            background: var(--accent-green);
+            color: white;
+        }
+        
+        .btn-success:hover:not(:disabled) {
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.5);
+        }
+        
+        .btn-danger {
+            background: transparent;
+            color: var(--accent-red);
+            border-color: var(--accent-red);
+        }
+        
+        .btn-danger:hover:not(:disabled) {
+            background: var(--accent-red);
+            color: white;
+        }
+        
+        .btn-icon { padding: 6px; min-width: 32px; }
+        
+        .btn-icon.active {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+            box-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
+        }
+        
+        .btn-sm { padding: 5px 8px; font-size: 10px; }
+        .btn-full { width: 100%; }
+        
+        .btn-group { display: flex; gap: 6px; }
+        .btn-group .btn { flex: 1; }
+        
+        /* Loading Spinner */
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top-color: currentColor;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        /* Module List */
+        .module-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .module-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .module-item:hover { background: var(--bg-hover); }
+        
+        .module-item.active {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 212, 255, 0.1);
+            animation: slideIn 0.2s ease-out;
+        }
+        
+        .module-item .icon { font-size: 18px; }
+        .module-item .info { flex: 1; min-width: 0; }
+        
+        .module-item .name {
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .module-item .meta { font-size: 10px; color: var(--text-muted); }
+        
+        .module-item .actions { display: flex; gap: 4px; }
+        .module-item .actions .btn { padding: 3px 6px; font-size: 9px; }
+        
+        .empty-state {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 11px;
+        }
+        
+        .empty-state .icon { font-size: 32px; margin-bottom: 6px; opacity: 0.4; }
+        
+        /* Upload Area */
+        .upload-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            background: var(--bg-input);
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 10px;
+        }
+        
+        .upload-area:hover {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 212, 255, 0.05);
+        }
+        
+        .upload-area.dragover {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 212, 255, 0.1);
+            box-shadow: var(--glow-cyan);
+        }
+        
+        .upload-area .icon { font-size: 24px; margin-bottom: 6px; }
+        .upload-area .text { font-size: 11px; color: var(--text-muted); text-align: center; }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 3px;
+            padding: 3px;
+            background: var(--bg-input);
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 8px 12px;
+            font-size: 11px;
+            font-weight: 500;
+            text-align: center;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .tab:hover { color: var(--text-secondary); }
+        
+        .tab.active {
+            background: var(--bg-card);
+            color: var(--accent-cyan);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.2s ease-out; }
+        
+        /* Training Guidance */
+        .training-guide {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(168, 85, 247, 0.08));
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .training-guide h4 {
+            font-size: 11px;
+            color: var(--accent-cyan);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .training-guide ul {
+            list-style: none;
+            font-size: 10px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        
+        .training-guide li {
+            padding-left: 14px;
+            position: relative;
+            margin-bottom: 3px;
+        }
+        
+        .training-guide li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent-cyan);
+        }
+        
+        /* Gesture List */
+        .gesture-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 12px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        
+        .gesture-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .gesture-item:hover { background: var(--bg-hover); }
+        
+        .gesture-item.active {
+            border-color: var(--accent-purple);
+            background: rgba(168, 85, 247, 0.1);
+        }
+        
+        .gesture-item .name { flex: 1; font-size: 12px; font-weight: 500; }
+        
+        .gesture-item .samples {
+            font-size: 10px;
+            color: var(--text-muted);
+            padding: 2px 6px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+        }
+        
+        .gesture-item .samples.good { color: var(--accent-green); }
+        .gesture-item .samples.warning { color: var(--accent-yellow); }
+        .gesture-item .samples.low { color: var(--accent-red); }
+        
+        /* Capture Status */
+        .capture-status {
+            padding: 10px 12px;
+            background: var(--bg-input);
+            border-radius: 6px;
+            border-left: 3px solid var(--border-color);
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+        
+        .capture-status.ready { border-left-color: var(--accent-green); color: var(--accent-green); }
+        .capture-status.warning { border-left-color: var(--accent-yellow); color: var(--accent-yellow); }
+        .capture-status.error { border-left-color: var(--accent-red); color: var(--accent-red); }
+        
+        /* Progress Bar */
+        .progress-bar {
+            height: 6px;
+            background: var(--bg-input);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+            transition: width 0.3s;
+            box-shadow: 0 0 8px var(--accent-cyan);
+        }
+        
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .toast {
+            padding: 12px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: slideIn 0.3s ease-out;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .toast.success { border-left: 3px solid var(--accent-green); }
+        .toast.error { border-left: 3px solid var(--accent-red); }
+        .toast.info { border-left: 3px solid var(--accent-cyan); }
+        
+        /* Debug Panel */
+        .debug-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            z-index: 999;
+            transition: transform 0.3s;
+        }
+        
+        .debug-panel.minimized { transform: translateY(calc(100% - 30px)); }
+        
+        .debug-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 14px;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+        
+        .debug-header h4 {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        
+        .debug-stats {
+            display: flex;
+            gap: 20px;
+            padding: 6px 14px;
+            background: var(--bg-input);
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+        }
+        
+        .debug-stat { color: var(--text-muted); }
+        .debug-stat span { color: var(--text-secondary); }
+        .debug-stat.success span { color: var(--accent-green); }
+        .debug-stat.error span { color: var(--accent-red); }
+        
+        .debug-logs {
+            max-height: 100px;
+            overflow-y: auto;
+            padding: 6px 14px;
+        }
+        
+        .log-entry {
+            display: flex;
+            gap: 10px;
+            padding: 2px 0;
+            border-bottom: 1px solid rgba(30, 41, 59, 0.5);
+        }
+        
+        .log-entry .time { color: var(--text-muted); flex-shrink: 0; }
+        .log-entry .msg { color: var(--text-secondary); word-break: break-word; }
+        .log-entry.info .msg { color: var(--accent-cyan); }
+        .log-entry.success .msg { color: var(--accent-green); }
+        .log-entry.warning .msg { color: var(--accent-yellow); }
+        .log-entry.error .msg { color: var(--accent-red); }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">✋</div>
+                <div>
+                    <div class="logo-text">SLIS</div>
+                    <div class="logo-sub">Sign Language Interpreter</div>
+                </div>
+            </div>
+            <div class="header-badges">
+                <div class="badge" id="badge-camera"><span class="dot"></span> Camera</div>
+                <div class="badge" id="badge-model"><span class="dot"></span> No Model</div>
+                <div class="badge" id="badge-fps">⚡ -- FPS</div>
+            </div>
+        </header>
+
+        <main class="main">
+            <section class="left-section" id="left-section">
+                <div class="recognition-display">
+                    <div class="current-gesture">
+                        <div class="gesture-icon" id="gesture-icon">🤚</div>
+                        <div class="gesture-info">
+                            <div class="gesture-label">Detected Gesture</div>
+                            <div class="gesture-name" id="gesture-name">—</div>
+                            <div class="gesture-confidence">
+                                <div class="confidence-bar">
+                                    <div class="confidence-fill" id="confidence-fill" style="width:0%"></div>
+                                </div>
+                                <div class="confidence-text" id="confidence-text">0%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sentence-area">
+                        <div class="sentence-label">Sentence</div>
+                        <div class="sentence-text" id="sentence-text">Start signing to build a sentence...</div>
+                        <div class="sentence-actions">
+                            <button class="btn btn-sm btn-secondary" id="btn-speak" title="Speak">🔊</button>
+                            <button class="btn btn-sm btn-secondary" id="btn-copy" title="Copy">📋</button>
+                            <button class="btn btn-sm btn-secondary" id="btn-clear-sentence" title="Clear">🗑️</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-container">
+                    <div class="video-wrapper">
+                        <video id="webcam" autoplay playsinline muted></video>
+                        <canvas id="canvas"></canvas>
+                        <div class="capture-flash" id="capture-flash"></div>
+                    </div>
+                    <div class="video-placeholder" id="video-placeholder">
+                        <div class="icon">📷</div>
+                        <div class="text">Click "Start Camera" to begin</div>
+                    </div>
+                </div>
+
+                <div class="camera-controls">
+                    <button class="btn btn-primary" id="btn-start">▶ Start</button>
+                    <button class="btn btn-secondary" id="btn-stop" disabled>■ Stop</button>
+                    <div class="control-divider"></div>
+                    <div class="camera-select-group">
+                        <label>📷</label>
+                        <select class="select input-sm camera-select" id="camera-select">
+                            <option value="">Default</option>
+                        </select>
+                    </div>
+                    <div class="control-divider"></div>
+                    <button class="btn btn-icon btn-secondary active" id="btn-skeleton" title="Show Skeleton">☠️</button>
+                    <button class="btn btn-icon btn-secondary" id="btn-mirror" title="Mirror">🔄</button>
+                </div>
+            </section>
+
+            <div class="divider" id="divider"></div>
+
+            <aside class="right-section" id="right-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>📦 Modules</h3>
+                        <label class="toggle" title="Training Mode">
+                            <input type="checkbox" id="training-mode">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="card-body">
+                        <div class="tabs">
+                            <button class="tab active" data-tab="modules">Loaded</button>
+                            <button class="tab" data-tab="training">Training</button>
+                        </div>
+
+                        <div class="tab-content active" id="tab-modules">
+                            <label class="upload-area" id="upload-area">
+                                <input type="file" id="model-input" accept=".task,.json" hidden>
+                                <span class="icon">📁</span>
+                                <span class="text">Drop .task or .json file<br>or click to browse</span>
+                            </label>
+                            
+                            <button class="btn btn-secondary btn-full btn-sm" id="btn-load-default" style="margin-bottom:10px">
+                                ⬇️ Load Default Model
+                            </button>
+
+                            <div class="module-list" id="module-list">
+                                <div class="empty-state">
+                                    <div class="icon">📭</div>
+                                    <div>No modules loaded</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-content" id="tab-training">
+                            <div class="training-guide">
+                                <h4>📖 Training Tips</h4>
+                                <ul>
+                                    <li>Capture <strong>50-100+</strong> samples per gesture</li>
+                                    <li>Vary hand position, angle, and distance</li>
+                                    <li>Keep hands fully visible in frame</li>
+                                    <li>Maintain consistent lighting</li>
+                                    <li>Press <strong>Space</strong> to capture quickly</li>
+                                </ul>
+                            </div>
+
+                            <div class="form-row">
+                                <label>Module Name</label>
+                                <input type="text" class="input input-sm" id="module-name" placeholder="e.g., ASL Alphabet">
+                            </div>
+                            
+                            <div class="gesture-list" id="gesture-list">
+                                <div class="empty-state">
+                                    <div class="icon">✋</div>
+                                    <div>Add gestures to start</div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <label>Add Gesture</label>
+                                <div class="btn-group">
+                                    <input type="text" class="input input-sm" id="gesture-name-input" placeholder="Gesture name" style="flex:2">
+                                    <button class="btn btn-primary btn-sm" id="btn-add-gesture">+</button>
+                                </div>
+                            </div>
+
+                            <div class="capture-status" id="capture-status">
+                                ℹ️ Enable training mode to start
+                            </div>
+
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="capture-progress" style="width:0%"></div>
+                            </div>
+
+                            <div class="btn-group" style="margin-bottom:10px">
+                                <button class="btn btn-primary" id="btn-capture" disabled>📸 Capture</button>
+                                <button class="btn btn-secondary" id="btn-clear-samples" title="Clear">🗑️</button>
+                            </div>
+
+                            <button class="btn btn-success btn-full" id="btn-finish-training" disabled>
+                                ✓ Finish Training
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>🔊 Voice</h3>
+                        <label class="toggle">
+                            <input type="checkbox" id="voice-enabled">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="card-body no-scroll">
+                        <div class="form-row">
+                            <label>Voice</label>
+                            <select class="select input-sm" id="voice-select">
+                                <option>Loading...</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <label>Rate</label>
+                            <div class="range-row">
+                                <input type="range" id="voice-rate" min="0.5" max="2" step="0.1" value="1">
+                                <span class="value" id="rate-val">1.0</span>
+                            </div>
+                        </div>
+                        <div class="checkbox-row">
+                            <input type="checkbox" class="checkbox" id="auto-speak">
+                            <label for="auto-speak">Auto-speak gestures</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>⚙️ Settings</h3>
+                    </div>
+                    <div class="card-body no-scroll">
+                        <div class="form-row">
+                            <label>Confidence Threshold</label>
+                            <div class="range-row">
+                                <input type="range" id="threshold" min="10" max="95" value="60">
+                                <span class="value" id="threshold-val">60%</span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <label>Debounce (seconds)</label>
+                            <div class="range-row">
+                                <input type="range" id="debounce" min="0.3" max="3" step="0.1" value="1">
+                                <span class="value" id="debounce-val">1.0s</span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <label>Recognition Smoothing</label>
+                            <div class="range-row">
+                                <input type="range" id="smoothing" min="1" max="10" value="3">
+                                <span class="value" id="smoothing-val">3</span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <label>Min Hold Time (ms)</label>
+                            <div class="range-row">
+                                <input type="range" id="hold-time" min="0" max="500" step="50" value="100">
+                                <span class="value" id="hold-val">100</span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <label>Max Hands</label>
+                            <select class="select input-sm" id="num-hands">
+                                <option value="1">1 Hand</option>
+                                <option value="2" selected>2 Hands</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <label>Glow Intensity</label>
+                            <div class="range-row">
+                                <input type="range" id="glow-intensity" min="0" max="100" value="70">
+                                <span class="value" id="glow-val">70%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <div class="debug-panel minimized" id="debug-panel">
+            <div class="debug-header" id="debug-header">
+                <h4>🐛 Debug</h4>
+                <button class="btn btn-sm btn-secondary" id="btn-toggle-debug">▲</button>
+            </div>
+            <div class="debug-stats">
+                <span class="debug-stat" id="dbg-camera">📷 <span>OFF</span></span>
+                <span class="debug-stat" id="dbg-mediapipe">🤖 <span>Loading</span></span>
+                <span class="debug-stat" id="dbg-hands">✋ <span>0</span></span>
+                <span class="debug-stat" id="dbg-model">📦 <span>None</span></span>
+            </div>
+            <div class="debug-logs" id="debug-logs"></div>
+        </div>
+
+        <div class="toast-container" id="toast-container"></div>
+    </div>
+
+    <script type="module">
+        const { GestureRecognizer, HandLandmarker, FilesetResolver } = await import(
+            'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3'
+        );
+
+        // IndexedDB
+        class ModuleDB {
+            constructor() {
+                this.dbName = 'SLIS_DB';
+                this.storeName = 'modules';
+                this.db = null;
+            }
+
+            async init() {
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open(this.dbName, 2);
+                    request.onerror = () => reject(request.error);
+                    request.onsuccess = () => { this.db = request.result; resolve(); };
+                    request.onupgradeneeded = (e) => {
+                        const db = e.target.result;
+                        if (!db.objectStoreNames.contains(this.storeName)) {
+                            db.createObjectStore(this.storeName, { keyPath: 'id' });
+                        }
+                    };
+                });
+            }
+
+            async save(module) {
+                return new Promise((resolve, reject) => {
+                    const tx = this.db.transaction(this.storeName, 'readwrite');
+                    tx.objectStore(this.storeName).put(module);
+                    tx.oncomplete = resolve;
+                    tx.onerror = () => reject(tx.error);
+                });
+            }
+
+            async getAll() {
+                return new Promise((resolve, reject) => {
+                    const tx = this.db.transaction(this.storeName, 'readonly');
+                    const request = tx.objectStore(this.storeName).getAll();
+                    request.onsuccess = () => resolve(request.result || []);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+
+            async delete(id) {
+                return new Promise((resolve, reject) => {
+                    const tx = this.db.transaction(this.storeName, 'readwrite');
+                    tx.objectStore(this.storeName).delete(id);
+                    tx.oncomplete = resolve;
+                    tx.onerror = () => reject(tx.error);
+                });
+            }
+        }
+
+        // Toast System
+        class ToastManager {
+            constructor() {
+                this.container = document.getElementById('toast-container');
+            }
+
+            show(message, type = 'info', duration = 3000) {
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                toast.innerHTML = `<span>${type === 'success' ? '✓' : type === 'error' ? '✗' : 'ℹ'}</span> ${message}`;
+                this.container.appendChild(toast);
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateX(100px)';
+                    setTimeout(() => toast.remove(), 300);
+                }, duration);
+            }
+        }
+
+        // Logger
+        class Logger {
+            constructor() {
+                this.container = document.getElementById('debug-logs');
+                this.maxLogs = 50;
+            }
+
+            log(msg, level = 'info') {
+                const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+                console.log(`[${level.toUpperCase()}] ${msg}`);
+                if (this.container) {
+                    const entry = document.createElement('div');
+                    entry.className = `log-entry ${level}`;
+                    entry.innerHTML = `<span class="time">${time}</span><span class="msg">${msg}</span>`;
+                    this.container.appendChild(entry);
+                    while (this.container.children.length > this.maxLogs) {
+                        this.container.removeChild(this.container.firstChild);
+                    }
+                    this.container.scrollTop = this.container.scrollHeight;
+                }
+            }
+
+            updateStat(id, value, status = null) {
+                const el = document.getElementById(`dbg-${id}`);
+                if (el) {
+                    const span = el.querySelector('span');
+                    if (span) span.textContent = value;
+                    el.classList.remove('success', 'error');
+                    if (status === true) el.classList.add('success');
+                    else if (status === false) el.classList.add('error');
+                }
+            }
+        }
+
+        // Voice Engine
+        class VoiceEngine {
+            constructor() {
+                this.synth = window.speechSynthesis;
+                this.voices = [];
+                this.currentVoice = null;
+                this.rate = 1.0;
+                this.enabled = false;
+            }
+
+            async init() {
+                return new Promise(resolve => {
+                    const loadVoices = () => {
+                        this.voices = this.synth.getVoices();
+                        if (this.voices.length > 0) {
+                            this.currentVoice = this.voices.find(v => 
+                                v.name.toLowerCase().includes('google uk english male')
+                            ) || this.voices.find(v => 
+                                v.lang === 'en-GB'
+                            ) || this.voices.find(v => 
+                                v.lang.startsWith('en')
+                            ) || this.voices[0];
+                        }
+                        resolve();
+                    };
+                    if (this.synth.getVoices().length > 0) loadVoices();
+                    else {
+                        this.synth.onvoiceschanged = loadVoices;
+                        setTimeout(resolve, 1500);
+                    }
+                });
+            }
+
+            speak(text) {
+                if (!text || !this.synth) return;
+                this.synth.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                if (this.currentVoice) utterance.voice = this.currentVoice;
+                utterance.rate = this.rate;
+                this.synth.speak(utterance);
+            }
+        }
+
+        // KNN Classifier
+        class KNNClassifier {
+            constructor() {
+                this.k = 5;
+                this.trainingData = [];
+            }
+
+            addExample(features, label) {
+                this.trainingData.push({ features, label });
+            }
+
+            clear() { this.trainingData = []; }
+
+            clearLabel(label) {
+                this.trainingData = this.trainingData.filter(d => d.label !== label);
+            }
+
+            predict(features) {
+                if (this.trainingData.length === 0) return { label: null, confidence: 0 };
+
+                const distances = this.trainingData.map(example => ({
+                    label: example.label,
+                    distance: this.euclideanDistance(features, example.features)
+                }));
+
+                distances.sort((a, b) => a.distance - b.distance);
+                const kNearest = distances.slice(0, Math.min(this.k, distances.length));
+
+                const votes = {};
+                let totalInverseDistance = 0;
+                kNearest.forEach(n => {
+                    const weight = 1 / (n.distance + 0.0001);
+                    votes[n.label] = (votes[n.label] || 0) + weight;
+                    totalInverseDistance += weight;
+                });
+
+                let maxVotes = 0;
+                let winner = null;
+                for (const [label, count] of Object.entries(votes)) {
+                    if (count > maxVotes) {
+                        maxVotes = count;
+                        winner = label;
+                    }
+                }
+
+                return { label: winner, confidence: maxVotes / totalInverseDistance };
+            }
+
+            euclideanDistance(a, b) {
+                if (a.length !== b.length) return Infinity;
+                let sum = 0;
+                for (let i = 0; i < a.length; i++) {
+                    sum += Math.pow(a[i] - b[i], 2);
+                }
+                return Math.sqrt(sum);
+            }
+
+            getExampleCount(label = null) {
+                if (label === null) return this.trainingData.length;
+                return this.trainingData.filter(d => d.label === label).length;
+            }
+
+            exportData() { return this.trainingData; }
+            importData(data) { this.trainingData = data; }
+        }
+
+        // Feature Extractor
+        class FeatureExtractor {
+            extractFeatures(landmarks) {
+                if (!landmarks || landmarks.length === 0) return null;
+                const features = [];
+
+                for (const hand of landmarks) {
+                    if (!hand || hand.length < 21) continue;
+                    const wrist = hand[0];
+                    const normalized = hand.map(lm => ({
+                        x: lm.x - wrist.x,
+                        y: lm.y - wrist.y,
+                        z: lm.z - wrist.z
+                    }));
+
+                    const scale = Math.sqrt(
+                        Math.pow(normalized[9].x, 2) + 
+                        Math.pow(normalized[9].y, 2) + 
+                        Math.pow(normalized[9].z, 2)
+                    ) || 1;
+
+                    for (const lm of normalized) {
+                        features.push(lm.x / scale, lm.y / scale, lm.z / scale);
+                    }
+
+                    const fingerTips = [4, 8, 12, 16, 20];
+                    const fingerBases = [2, 5, 9, 13, 17];
+                    for (let i = 0; i < 5; i++) {
+                        const tip = normalized[fingerTips[i]];
+                        const base = normalized[fingerBases[i]];
+                        features.push(Math.atan2(tip.y - base.y, tip.x - base.x) / Math.PI);
+                    }
+
+                    for (let i = 0; i < 5; i++) {
+                        const tip = normalized[fingerTips[i]];
+                        features.push(Math.sqrt(tip.x*tip.x + tip.y*tip.y + tip.z*tip.z) / scale);
+                    }
+
+                    for (let i = 0; i < fingerTips.length; i++) {
+                        for (let j = i + 1; j < fingerTips.length; j++) {
+                            const t1 = normalized[fingerTips[i]];
+                            const t2 = normalized[fingerTips[j]];
+                            features.push(Math.sqrt(
+                                Math.pow(t1.x - t2.x, 2) + 
+                                Math.pow(t1.y - t2.y, 2) + 
+                                Math.pow(t1.z - t2.z, 2)
+                            ) / scale);
+                        }
+                    }
+                }
+
+                const targetSize = 166;
+                while (features.length < targetSize) features.push(0);
+                return features.slice(0, targetSize);
+            }
+        }
+
+        // Main Application
+        class SLISApp {
+            constructor() {
+                this.logger = new Logger();
+                this.toast = new ToastManager();
+                this.voice = new VoiceEngine();
+                this.moduleDB = new ModuleDB();
+                this.knn = new KNNClassifier();
+                this.featureExtractor = new FeatureExtractor();
+
+                this.handLandmarker = null;
+                this.gestureRecognizer = null;
+                this.vision = null;
+
+                this.isRunning = false;
+                this.isMirrored = false;
+                this.showSkeleton = true;
+                this.numHands = 2;
+                this.confidenceThreshold = 0.6;
+                this.gestureDebounce = 1000;
+                this.smoothingFrames = 3;
+                this.minHoldTime = 100;
+                this.glowIntensity = 0.7;
+                this.autoSpeak = false;
+
+                this.sentence = [];
+                this.lastGesture = null;
+                this.lastGestureTime = 0;
+                this.lastResults = null;
+                this.recentPredictions = [];
+
+                this.frameCount = 0;
+                this.lastFpsTime = 0;
+
+                this.modules = [];
+                this.activeModuleId = null;
+                this.activeModuleType = null;
+
+                this.trainingModule = null;
+                this.currentGestureIndex = -1;
+                this.isTrainingMode = false;
+                this.captureCooldown = false;
+
+                this.cameraPermissionGranted = false;
+
+                this.el = {};
+
+                this.init();
+            }
+
+            async init() {
+                this.logger.log('Initializing SLIS...', 'info');
+                this.cacheElements();
+                this.bindEvents();
+                this.initResizer();
+                
+                await this.moduleDB.init();
+                await this.loadModulesFromDB();
+                await this.voice.init();
+                this.populateVoices();
+                await this.checkCameraPermission();
+                await this.initMediaPipe();
+                
+                this.logger.log('SLIS ready!', 'success');
+                this.toast.show('System initialized', 'success');
+            }
+
+            cacheElements() {
+                const ids = [
+                    'webcam', 'canvas', 'video-placeholder', 'capture-flash',
+                    'btn-start', 'btn-stop', 'btn-skeleton', 'btn-mirror',
+                    'camera-select', 'left-section', 'right-section', 'divider',
+                    'gesture-icon', 'gesture-name', 'confidence-fill', 'confidence-text',
+                    'sentence-text', 'btn-speak', 'btn-copy', 'btn-clear-sentence',
+                    'upload-area', 'model-input', 'btn-load-default', 'module-list',
+                    'training-mode', 'module-name', 'gesture-list', 'gesture-name-input',
+                    'btn-add-gesture', 'capture-status', 'capture-progress',
+                    'btn-capture', 'btn-clear-samples', 'btn-finish-training',
+                    'voice-enabled', 'voice-select', 'voice-rate', 'rate-val', 'auto-speak',
+                    'threshold', 'threshold-val', 'debounce', 'debounce-val',
+                    'smoothing', 'smoothing-val', 'hold-time', 'hold-val',
+                    'num-hands', 'glow-intensity', 'glow-val',
+                    'badge-camera', 'badge-model', 'badge-fps',
+                    'debug-panel', 'debug-header', 'btn-toggle-debug'
+                ];
+                ids.forEach(id => {
+                    this.el[id.replace(/-/g, '_')] = document.getElementById(id);
+                });
+            }
+
+            initResizer() {
+                const divider = this.el.divider;
+                const left = this.el.left_section;
+                const right = this.el.right_section;
+                let isDragging = false;
+
+                divider.addEventListener('mousedown', (e) => {
+                    isDragging = true;
+                    divider.classList.add('dragging');
+                    document.body.style.cursor = 'col-resize';
+                    document.body.style.userSelect = 'none';
+                });
+
+                document.addEventListener('mousemove', (e) => {
+                    if (!isDragging) return;
+                    const container = document.querySelector('.main');
+                    const containerRect = container.getBoundingClientRect();
+                    const newLeftWidth = e.clientX - containerRect.left - 12;
+                    const minLeft = 400;
+                    const maxLeft = containerRect.width - 300;
+                    
+                    if (newLeftWidth >= minLeft && newLeftWidth <= maxLeft) {
+                        left.style.flex = 'none';
+                        left.style.width = `${newLeftWidth}px`;
+                        right.style.width = `${containerRect.width - newLeftWidth - 30}px`;
+                    }
+                });
+
+                document.addEventListener('mouseup', () => {
+                    if (isDragging) {
+                        isDragging = false;
+                        divider.classList.remove('dragging');
+                        document.body.style.cursor = '';
+                        document.body.style.userSelect = '';
+                    }
+                });
+            }
+
+            bindEvents() {
+                this.el.btn_start.onclick = () => this.startCamera();
+                this.el.btn_stop.onclick = () => this.stopCamera();
+                this.el.btn_skeleton.onclick = () => this.toggleSkeleton();
+                this.el.btn_mirror.onclick = () => this.toggleMirror();
+                this.el.camera_select.onchange = () => {
+                    if (this.isRunning) {
+                        this.stopCamera();
+                        setTimeout(() => this.startCamera(), 100);
+                    }
+                };
+
+                this.el.btn_speak.onclick = () => this.voice.speak(this.sentence.join(' '));
+                this.el.btn_copy.onclick = () => {
+                    navigator.clipboard.writeText(this.sentence.join(' '));
+                    this.toast.show('Copied to clipboard', 'success');
+                };
+                this.el.btn_clear_sentence.onclick = () => {
+                    this.sentence = [];
+                    this.el.sentence_text.textContent = 'Start signing to build a sentence...';
+                };
+
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.onclick = () => {
+                        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                        tab.classList.add('active');
+                        document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+                    };
+                });
+
+                this.el.btn_load_default.onclick = () => this.loadDefaultModel();
+                this.el.upload_area.onclick = () => this.el.model_input.click();
+                this.el.model_input.onchange = (e) => {
+                    const file = e.target.files[0];
+                    if (file) this.loadModelFile(file);
+                };
+
+                ['dragover', 'dragenter'].forEach(evt => {
+                    this.el.upload_area.addEventListener(evt, (e) => {
+                        e.preventDefault();
+                        this.el.upload_area.classList.add('dragover');
+                    });
+                });
+                ['dragleave', 'drop'].forEach(evt => {
+                    this.el.upload_area.addEventListener(evt, (e) => {
+                        e.preventDefault();
+                        this.el.upload_area.classList.remove('dragover');
+                    });
+                });
+                this.el.upload_area.addEventListener('drop', (e) => {
+                    const file = e.dataTransfer.files[0];
+                    if (file) this.loadModelFile(file);
+                });
+
+                this.el.training_mode.onchange = (e) => {
+                    this.isTrainingMode = e.target.checked;
+                    if (e.target.checked) {
+                        document.querySelector('[data-tab="training"]').click();
+                    }
+                    this.updateCaptureStatus();
+                };
+                this.el.btn_add_gesture.onclick = () => this.addGesture();
+                this.el.btn_capture.onclick = () => this.captureTrainingSample();
+                this.el.btn_clear_samples.onclick = () => this.clearCurrentGestureSamples();
+                this.el.btn_finish_training.onclick = () => this.finishTraining();
+
+                this.el.voice_enabled.onchange = (e) => this.voice.enabled = e.target.checked;
+                this.el.voice_select.onchange = (e) => {
+                    this.voice.currentVoice = this.voice.voices[parseInt(e.target.value)];
+                };
+                this.el.voice_rate.oninput = (e) => {
+                    this.voice.rate = parseFloat(e.target.value);
+                    this.el.rate_val.textContent = e.target.value;
+                };
+                this.el.auto_speak.onchange = (e) => this.autoSpeak = e.target.checked;
+
+                this.el.threshold.oninput = (e) => {
+                    this.confidenceThreshold = parseInt(e.target.value) / 100;
+                    this.el.threshold_val.textContent = `${e.target.value}%`;
+                };
+                this.el.debounce.oninput = (e) => {
+                    this.gestureDebounce = parseFloat(e.target.value) * 1000;
+                    this.el.debounce_val.textContent = `${e.target.value}s`;
+                };
+                this.el.smoothing.oninput = (e) => {
+                    this.smoothingFrames = parseInt(e.target.value);
+                    this.el.smoothing_val.textContent = e.target.value;
+                };
+                this.el.hold_time.oninput = (e) => {
+                    this.minHoldTime = parseInt(e.target.value);
+                    this.el.hold_val.textContent = e.target.value;
+                };
+                this.el.num_hands.onchange = (e) => {
+                    this.numHands = parseInt(e.target.value);
+                    this.reinitMediaPipe();
+                };
+                this.el.glow_intensity.oninput = (e) => {
+                    this.glowIntensity = parseInt(e.target.value) / 100;
+                    this.el.glow_val.textContent = `${e.target.value}%`;
+                };
+
+                document.onkeydown = (e) => {
+                    if (e.code === 'Space' && this.isTrainingMode && !e.target.matches('input, textarea')) {
+                        e.preventDefault();
+                        this.captureTrainingSample();
+                    }
+                };
+
+                this.el.btn_toggle_debug.onclick = () => this.toggleDebug();
+                this.el.debug_header.onclick = (e) => {
+                    if (e.target === this.el.debug_header || e.target.tagName === 'H4') {
+                        this.toggleDebug();
+                    }
+                };
+            }
+
+            toggleDebug() {
+                this.el.debug_panel.classList.toggle('minimized');
+                this.el.btn_toggle_debug.textContent = 
+                    this.el.debug_panel.classList.contains('minimized') ? '▲' : '▼';
+            }
+
+            toggleSkeleton() {
+                this.showSkeleton = !this.showSkeleton;
+                this.el.btn_skeleton.classList.toggle('active', this.showSkeleton);
+            }
+
+            toggleMirror() {
+                this.isMirrored = !this.isMirrored;
+                this.el.webcam.style.transform = this.isMirrored ? 'scaleX(-1)' : '';
+                this.el.canvas.style.transform = this.isMirrored ? 'scaleX(-1)' : '';
+                this.el.btn_mirror.classList.toggle('active', this.isMirrored);
+            }
+
+            async checkCameraPermission() {
+                try {
+                    const result = await navigator.permissions.query({ name: 'camera' });
+                    this.cameraPermissionGranted = result.state === 'granted';
+                    if (this.cameraPermissionGranted) {
+                        await this.enumerateCameras();
+                    }
+                } catch (e) {
+                    // Permissions API not supported
+                }
+            }
+
+            async enumerateCameras() {
+                try {
+                    if (!this.cameraPermissionGranted) {
+                        await navigator.mediaDevices.getUserMedia({ video: true }).then(s => s.getTracks().forEach(t => t.stop()));
+                        this.cameraPermissionGranted = true;
+                    }
+                    const devices = await navigator.mediaDevices.enumerateDevices();
+                    const cameras = devices.filter(d => d.kind === 'videoinput');
+                    this.el.camera_select.innerHTML = cameras.map((cam, i) => 
+                        `<option value="${cam.deviceId}">${cam.label || `Camera ${i + 1}`}</option>`
+                    ).join('');
+                } catch (e) {
+                    this.logger.log('Camera access denied', 'error');
+                }
+            }
+
+            async initMediaPipe() {
+                this.logger.log('Loading MediaPipe...', 'info');
+                this.logger.updateStat('mediapipe', 'Loading...', null);
+
+                try {
+                    this.vision = await FilesetResolver.forVisionTasks(
+                        'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm'
+                    );
+
+                    this.handLandmarker = await HandLandmarker.createFromOptions(this.vision, {
+                        baseOptions: {
+                            modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',
+                            delegate: 'GPU'
+                        },
+                        runningMode: 'VIDEO',
+                        numHands: this.numHands
+                    }).catch(() => HandLandmarker.createFromOptions(this.vision, {
+                        baseOptions: {
+                            modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',
+                            delegate: 'CPU'
+                        },
+                        runningMode: 'VIDEO',
+                        numHands: this.numHands
+                    }));
+
+                    this.logger.log('MediaPipe ready', 'success');
+                    this.logger.updateStat('mediapipe', 'Ready', true);
+
+                } catch (error) {
+                    this.logger.log(`MediaPipe failed: ${error.message}`, 'error');
+                    this.logger.updateStat('mediapipe', 'Failed', false);
+                }
+            }
+
+            async reinitMediaPipe() {
+                if (this.handLandmarker) {
+                    this.handLandmarker.close();
+                    this.handLandmarker = null;
+                }
+                await this.initMediaPipe();
+            }
+
+            async startCamera() {
+                this.logger.log('Starting camera...', 'info');
+
+                try {
+                    if (!this.cameraPermissionGranted) {
+                        await this.enumerateCameras();
+                    }
+
+                    const deviceId = this.el.camera_select.value;
+                    const constraints = {
+                        video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: 'user' }
+                    };
+                    if (deviceId) constraints.video.deviceId = { exact: deviceId };
+
+                    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                    this.el.webcam.srcObject = stream;
+                    
+                    await new Promise(resolve => {
+                        this.el.webcam.onloadedmetadata = () => this.el.webcam.play().then(resolve);
+                    });
+
+                    await new Promise(r => setTimeout(r, 200));
+
+                    this.el.canvas.width = this.el.webcam.videoWidth;
+                    this.el.canvas.height = this.el.webcam.videoHeight;
+
+                    this.isRunning = true;
+                    this.el.btn_start.disabled = true;
+                    this.el.btn_stop.disabled = false;
+                    this.el.video_placeholder.style.display = 'none';
+
+                    this.logger.log(`Camera: ${this.el.webcam.videoWidth}x${this.el.webcam.videoHeight}`, 'success');
+                    this.logger.updateStat('camera', 'ON', true);
+                    this.el.badge_camera.classList.add('active');
+
+                    this.updateCaptureStatus();
+                    this.lastFpsTime = performance.now();
+                    this.processFrame();
+
+                } catch (error) {
+                    this.logger.log(`Camera error: ${error.message}`, 'error');
+                    this.toast.show('Camera access failed', 'error');
+                }
+            }
+
+            stopCamera() {
+                this.isRunning = false;
+                const stream = this.el.webcam.srcObject;
+                if (stream) {
+                    stream.getTracks().forEach(t => t.stop());
+                    this.el.webcam.srcObject = null;
+                }
+                
+                const ctx = this.el.canvas.getContext('2d');
+                ctx.clearRect(0, 0, this.el.canvas.width, this.el.canvas.height);
+                
+                this.el.btn_start.disabled = false;
+                this.el.btn_stop.disabled = true;
+                this.el.video_placeholder.style.display = 'flex';
+                
+                this.logger.log('Camera stopped', 'info');
+                this.logger.updateStat('camera', 'OFF', false);
+                this.el.badge_camera.classList.remove('active');
+                this.el.badge_fps.textContent = '⚡ -- FPS';
+                this.updateCaptureStatus();
+            }
+
+            processFrame() {
+                if (!this.isRunning) return;
+
+                const timestamp = performance.now();
+                const video = this.el.webcam;
+                
+                if (video.readyState < 2) {
+                    requestAnimationFrame(() => this.processFrame());
+                    return;
+                }
+
+                const rect = video.getBoundingClientRect();
+                this.el.canvas.style.width = rect.width + 'px';
+                this.el.canvas.style.height = rect.height + 'px';
+
+                try {
+                    if (this.gestureRecognizer && this.activeModuleType === 'task') {
+                        const results = this.gestureRecognizer.recognizeForVideo(video, timestamp);
+                        this.lastResults = {
+                            landmarks: results.landmarks,
+                            handedness: results.handedness,
+                            gestures: results.gestures
+                        };
+                    } else if (this.handLandmarker) {
+                        const handResults = this.handLandmarker.detectForVideo(video, timestamp);
+                        this.lastResults = {
+                            landmarks: handResults.landmarks,
+                            handedness: handResults.handedness,
+                            gestures: null
+                        };
+                    }
+                } catch (e) {}
+
+                if (this.showSkeleton) {
+                    this.drawEnhancedSkeleton(this.lastResults);
+                } else {
+                    const ctx = this.el.canvas.getContext('2d');
+                    ctx.clearRect(0, 0, this.el.canvas.width, this.el.canvas.height);
+                }
+
+                this.updateDetectionStatus(this.lastResults);
+                
+                if (!this.isTrainingMode) {
+                    this.handleRecognition(this.lastResults);
+                }
+                
+                this.updateCaptureStatus();
+
+                this.frameCount++;
+                if (timestamp - this.lastFpsTime >= 1000) {
+                    this.el.badge_fps.textContent = `⚡ ${this.frameCount} FPS`;
+                    this.frameCount = 0;
+                    this.lastFpsTime = timestamp;
+                }
+
+                requestAnimationFrame(() => this.processFrame());
+            }
+
+            drawEnhancedSkeleton(results) {
+                const ctx = this.el.canvas.getContext('2d');
+                const w = this.el.canvas.width;
+                const h = this.el.canvas.height;
+                ctx.clearRect(0, 0, w, h);
+
+                if (!results?.landmarks?.length) return;
+
+                const CONNECTIONS = [
+                    [0,1],[1,2],[2,3],[3,4],
+                    [0,5],[5,6],[6,7],[7,8],
+                    [0,9],[9,10],[10,11],[11,12],
+                    [0,13],[13,14],[14,15],[15,16],
+                    [0,17],[17,18],[18,19],[19,20],
+                    [5,9],[9,13],[13,17]
+                ];
+
+                const tips = [4, 8, 12, 16, 20];
+                const glow = this.glowIntensity;
+
+                results.landmarks.forEach((landmarks, idx) => {
+                    const handedness = results.handedness?.[idx]?.[0]?.categoryName || 'Right';
+                    const isLeft = handedness === 'Left';
+                    const color1 = isLeft ? '#00d4ff' : '#a855f7';
+                    const color2 = isLeft ? '#22d3ee' : '#c084fc';
+
+                    // Draw connections with gradient
+                    ctx.lineCap = 'round';
+                    ctx.lineJoin = 'round';
+                    
+                    CONNECTIONS.forEach(([i, j]) => {
+                        const p1 = landmarks[i];
+                        const p2 = landmarks[j];
+                        if (!p1 || !p2) return;
+
+                        const x1 = p1.x * w, y1 = p1.y * h;
+                        const x2 = p2.x * w, y2 = p2.y * h;
+
+                        // Glow effect
+                        if (glow > 0) {
+                            ctx.shadowColor = color1;
+                            ctx.shadowBlur = 15 * glow;
+                        }
+
+                        // Gradient line
+                        const gradient = ctx.createLinearGradient(x1, y1, x2, y2);
+                        gradient.addColorStop(0, color1);
+                        gradient.addColorStop(1, color2);
+
+                        ctx.strokeStyle = gradient;
+                        ctx.lineWidth = 4;
+                        ctx.beginPath();
+                        ctx.moveTo(x1, y1);
+                        ctx.lineTo(x2, y2);
+                        ctx.stroke();
+                    });
+
+                    ctx.shadowBlur = 0;
+
+                    // Draw landmarks
+                    landmarks.forEach((pt, i) => {
+                        const x = pt.x * w;
+                        const y = pt.y * h;
+                        const isTip = tips.includes(i);
+                        const r = isTip ? 8 : 5;
+
+                        // Outer glow
+                        if (glow > 0) {
+                            const glowGradient = ctx.createRadialGradient(x, y, 0, x, y, r * 3);
+                            glowGradient.addColorStop(0, isTip ? `${color1}${Math.round(glow * 80).toString(16).padStart(2, '0')}` : 'transparent');
+                            glowGradient.addColorStop(1, 'transparent');
+                            ctx.fillStyle = glowGradient;
+                            ctx.beginPath();
+                            ctx.arc(x, y, r * 3, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+
+                        // Main dot
+                        const dotGradient = ctx.createRadialGradient(x - r/3, y - r/3, 0, x, y, r);
+                        dotGradient.addColorStop(0, '#ffffff');
+                        dotGradient.addColorStop(0.5, color1);
+                        dotGradient.addColorStop(1, color2);
+
+                        ctx.fillStyle = dotGradient;
+                        ctx.beginPath();
+                        ctx.arc(x, y, r, 0, Math.PI * 2);
+                        ctx.fill();
+
+                        // Border
+                        ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    });
+                });
+            }
+
+            updateDetectionStatus(results) {
+                const count = results?.landmarks?.length || 0;
+                this.logger.updateStat('hands', count.toString(), count > 0);
+                this.el.gesture_icon.textContent = count === 2 ? '🙌' : count === 1 ? '✋' : '🤚';
+                this.el.gesture_icon.classList.toggle('detected', count > 0);
+            }
+
+            handleRecognition(results) {
+                if (results?.gestures?.length && this.activeModuleType === 'task') {
+                    const gesture = results.gestures[0][0];
+                    this.displayGesture(gesture.categoryName, gesture.score);
+                    return;
+                }
+
+                if (this.activeModuleType === 'trained' && results?.landmarks?.length) {
+                    const features = this.featureExtractor.extractFeatures(results.landmarks);
+                    if (features) {
+                        const prediction = this.knn.predict(features);
+                        this.recentPredictions.push(prediction);
+                        if (this.recentPredictions.length > this.smoothingFrames) {
+                            this.recentPredictions.shift();
+                        }
+
+                        // Smoothed prediction
+                        const votes = {};
+                        this.recentPredictions.forEach(p => {
+                            if (p.label) votes[p.label] = (votes[p.label] || 0) + p.confidence;
+                        });
+
+                        let best = null, bestScore = 0;
+                        for (const [label, score] of Object.entries(votes)) {
+                            if (score > bestScore) {
+                                bestScore = score;
+                                best = label;
+                            }
+                        }
+
+                        if (best) {
+                            const avgConfidence = bestScore / this.recentPredictions.length;
+                            this.displayGesture(best, avgConfidence);
+                        }
+                    }
+                    return;
+                }
+
+                this.el.gesture_name.textContent = '—';
+                this.el.confidence_fill.style.width = '0%';
+                this.el.confidence_text.textContent = '0%';
+            }
+
+            displayGesture(name, confidence) {
+                const prevName = this.el.gesture_name.textContent;
+                this.el.gesture_name.textContent = name;
+                this.el.confidence_fill.style.width = `${confidence * 100}%`;
+                this.el.confidence_text.textContent = `${(confidence * 100).toFixed(0)}%`;
+
+                if (name !== prevName) {
+                    this.el.gesture_name.classList.add('new');
+                    setTimeout(() => this.el.gesture_name.classList.remove('new'), 200);
+                }
+
+                if (confidence < this.confidenceThreshold) return;
+                if (name === 'None' || name === 'Unknown') return;
+
+                const now = Date.now();
+                if (name === this.lastGesture && now - this.lastGestureTime < this.gestureDebounce) return;
+
+                this.lastGesture = name;
+                this.lastGestureTime = now;
+                this.sentence.push(name);
+                this.el.sentence_text.textContent = this.sentence.join(' ');
+
+                if (this.autoSpeak && this.voice.enabled) this.voice.speak(name);
+                this.logger.log(`Gesture: ${name} (${(confidence * 100).toFixed(0)}%)`, 'success');
+            }
+
+            async loadModulesFromDB() {
+                try {
+                    this.modules = await this.moduleDB.getAll();
+                    this.renderModuleList();
+                } catch (e) {
+                    this.logger.log('Failed to load modules', 'error');
+                }
+            }
+
+            renderModuleList() {
+                if (this.modules.length === 0) {
+                    this.el.module_list.innerHTML = `
+                        <div class="empty-state">
+                            <div class="icon">📭</div>
+                            <div>No modules loaded</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                this.el.module_list.innerHTML = this.modules.map(m => `
+                    <div class="module-item ${m.id === this.activeModuleId ? 'active' : ''}" data-id="${m.id}">
+                        <span class="icon">${m.type === 'task' ? '🧠' : '📚'}</span>
+                        <div class="info">
+                            <div class="name">${m.name}</div>
+                            <div class="meta">${m.gestures?.length || 0} gestures</div>
+                        </div>
+                        <div class="actions">
+                            <button class="btn btn-sm btn-secondary btn-activate" data-id="${m.id}">Use</button>
+                            <button class="btn btn-sm btn-danger btn-delete" data-id="${m.id}">×</button>
+                        </div>
+                    </div>
+                `).join('');
+
+                this.el.module_list.querySelectorAll('.btn-activate').forEach(btn => {
+                    btn.onclick = (e) => { e.stopPropagation(); this.activateModule(btn.dataset.id); };
+                });
+                this.el.module_list.querySelectorAll('.btn-delete').forEach(btn => {
+                    btn.onclick = (e) => { e.stopPropagation(); this.deleteModule(btn.dataset.id); };
+                });
+            }
+
+            async activateModule(id) {
+                const module = this.modules.find(m => m.id === id);
+                if (!module) return;
+
+                this.activeModuleId = id;
+                this.activeModuleType = module.type;
+                this.renderModuleList();
+
+                if (module.type === 'task' && module.url) {
+                    await this.loadGestureRecognizerFromUrl(module.url);
+                } else if (module.type === 'trained') {
+                    if (this.gestureRecognizer) {
+                        this.gestureRecognizer.close();
+                        this.gestureRecognizer = null;
+                    }
+                    this.knn.clear();
+                    if (module.knnData) {
+                        this.knn.importData(module.knnData);
+                    }
+                }
+
+                this.el.badge_model.innerHTML = `<span class="dot"></span> ${module.name.slice(0, 12)}`;
+                this.el.badge_model.classList.add('active');
+                this.logger.updateStat('model', module.name, true);
+                this.toast.show(`Activated: ${module.name}`, 'success');
+            }
+
+            async deleteModule(id) {
+                await this.moduleDB.delete(id);
+                this.modules = this.modules.filter(m => m.id !== id);
+                if (this.activeModuleId === id) {
+                    this.activeModuleId = null;
+                    this.activeModuleType = null;
+                    if (this.gestureRecognizer) {
+                        this.gestureRecognizer.close();
+                        this.gestureRecognizer = null;
+                    }
+                    this.knn.clear();
+                    this.el.badge_model.innerHTML = '<span class="dot"></span> No Model';
+                    this.el.badge_model.classList.remove('active');
+                    this.logger.updateStat('model', 'None', null);
+                }
+                this.renderModuleList();
+                this.toast.show('Module deleted', 'info');
+            }
+
+            async loadDefaultModel() {
+                this.el.btn_load_default.disabled = true;
+                this.el.btn_load_default.innerHTML = '<span class="spinner"></span> Loading...';
+
+                try {
+                    const url = 'https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task';
+                    await this.loadGestureRecognizerFromUrl(url);
+
+                    const module = {
+                        id: 'default-' + Date.now(),
+                        name: 'MediaPipe Default',
+                        type: 'task',
+                        url: url,
+                        gestures: ['None', 'Closed_Fist', 'Open_Palm', 'Pointing_Up', 'Thumb_Down', 'Thumb_Up', 'Victory', 'ILoveYou'],
+                        createdAt: new Date().toISOString()
+                    };
+
+                    await this.moduleDB.save(module);
+                    this.modules.push(module);
+                    this.activeModuleId = module.id;
+                    this.activeModuleType = 'task';
+                    this.renderModuleList();
+
+                    this.el.badge_model.innerHTML = '<span class="dot"></span> Default';
+                    this.el.badge_model.classList.add('active');
+                    this.logger.updateStat('model', 'Default', true);
+                    this.toast.show('Default model loaded!', 'success');
+
+                } catch (error) {
+                    this.toast.show('Failed to load model', 'error');
+                }
+
+                this.el.btn_load_default.disabled = false;
+                this.el.btn_load_default.textContent = '⬇️ Load Default Model';
+            }
+
+            async loadGestureRecognizerFromUrl(url) {
+                if (this.gestureRecognizer) {
+                    this.gestureRecognizer.close();
+                }
+
+                this.gestureRecognizer = await GestureRecognizer.createFromOptions(this.vision, {
+                    baseOptions: { modelAssetPath: url, delegate: 'GPU' },
+                    runningMode: 'VIDEO',
+                    numHands: this.numHands
+                });
+            }
+
+            async loadModelFile(file) {
+                this.logger.log(`Loading: ${file.name}`, 'info');
+
+                try {
+                    if (file.name.endsWith('.task')) {
+                        const arrayBuffer = await file.arrayBuffer();
+                        const blob = new Blob([arrayBuffer]);
+                        const url = URL.createObjectURL(blob);
+
+                        await this.loadGestureRecognizerFromUrl(url);
+
+                        const module = {
+                            id: 'task-' + Date.now(),
+                            name: file.name.replace('.task', ''),
+                            type: 'task',
+                            url: url,
+                            gestures: [],
+                            createdAt: new Date().toISOString()
+                        };
+
+                        await this.moduleDB.save(module);
+                        this.modules.push(module);
+                        this.activeModuleId = module.id;
+                        this.activeModuleType = 'task';
+                        this.renderModuleList();
+
+                        this.el.badge_model.innerHTML = `<span class="dot"></span> ${module.name.slice(0, 12)}`;
+                        this.el.badge_model.classList.add('active');
+                        this.toast.show(`Loaded: ${file.name}`, 'success');
+
+                    } else if (file.name.endsWith('.json')) {
+                        const text = await file.text();
+                        const data = JSON.parse(text);
+
+                        if (data.knnData || data.gestures) {
+                            const module = {
+                                id: 'trained-' + Date.now(),
+                                name: data.name || file.name.replace('.json', ''),
+                                type: 'trained',
+                                gestures: data.gestures || [],
+                                knnData: data.knnData || [],
+                                createdAt: new Date().toISOString()
+                            };
+
+                            await this.moduleDB.save(module);
+                            this.modules.push(module);
+                            this.renderModuleList();
+                            this.toast.show(`Imported: ${module.name}`, 'success');
+                        }
+                    }
+                } catch (error) {
+                    this.toast.show('Failed to load file', 'error');
+                }
+            }
+
+            addGesture() {
+                const name = this.el.gesture_name_input.value.trim();
+                if (!name) {
+                    this.toast.show('Enter a gesture name', 'error');
+                    return;
+                }
+
+                if (!this.trainingModule) {
+                    const moduleName = this.el.module_name.value.trim() || 'Custom Module';
+                    this.trainingModule = {
+                        id: 'trained-' + Date.now(),
+                        name: moduleName,
+                        type: 'trained',
+                        gestures: [],
+                        knnData: [],
+                        createdAt: new Date().toISOString()
+                    };
+                }
+
+                if (this.trainingModule.gestures.find(g => g.name.toLowerCase() === name.toLowerCase())) {
+                    this.toast.show('Gesture already exists', 'error');
+                    return;
+                }
+
+                this.trainingModule.gestures.push({ name: name, sampleCount: 0 });
+                this.currentGestureIndex = this.trainingModule.gestures.length - 1;
+                this.el.gesture_name_input.value = '';
+                this.renderGestureList();
+                this.updateCaptureStatus();
+                this.el.btn_finish_training.disabled = false;
+                this.toast.show(`Added: ${name}`, 'success');
+            }
+
+            renderGestureList() {
+                if (!this.trainingModule || this.trainingModule.gestures.length === 0) {
+                    this.el.gesture_list.innerHTML = `
+                        <div class="empty-state">
+                            <div class="icon">✋</div>
+                            <div>Add gestures to start</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                this.el.gesture_list.innerHTML = this.trainingModule.gestures.map((g, i) => {
+                    const count = this.knn.getExampleCount(g.name);
+                    let sampleClass = 'low';
+                    if (count >= 50) sampleClass = 'good';
+                    else if (count >= 20) sampleClass = 'warning';
+                    
+                    return `
+                        <div class="gesture-item ${i === this.currentGestureIndex ? 'active' : ''}" data-index="${i}">
+                            <span class="name">${g.name}</span>
+                            <span class="samples ${sampleClass}">${count}</span>
+                        </div>
+                    `;
+                }).join('');
+
+                this.el.gesture_list.querySelectorAll('.gesture-item').forEach(item => {
+                    item.onclick = () => {
+                        this.currentGestureIndex = parseInt(item.dataset.index);
+                        this.renderGestureList();
+                        this.updateCaptureStatus();
+                    };
+                });
+            }
+
+            updateCaptureStatus() {
+                const hasModule = !!this.trainingModule;
+                const hasGesture = this.currentGestureIndex >= 0;
+                const hasHands = this.lastResults?.landmarks?.length > 0;
+                const canCapture = this.isRunning && hasModule && hasGesture && hasHands && !this.captureCooldown;
+
+                this.el.btn_capture.disabled = !canCapture;
+
+                const status = this.el.capture_status;
+                if (!this.isTrainingMode) {
+                    status.textContent = 'ℹ️ Enable training mode to start';
+                    status.className = 'capture-status';
+                } else if (!this.isRunning) {
+                    status.textContent = '⚠️ Start the camera first';
+                    status.className = 'capture-status warning';
+                } else if (!hasModule) {
+                    status.textContent = 'ℹ️ Add gestures to begin';
+                    status.className = 'capture-status';
+                } else if (!hasGesture) {
+                    status.textContent = '⚠️ Select a gesture';
+                    status.className = 'capture-status warning';
+                } else if (!hasHands) {
+                    status.textContent = '🖐️ Show your hand';
+                    status.className = 'capture-status error';
+                } else {
+                    const gesture = this.trainingModule.gestures[this.currentGestureIndex];
+                    const count = this.knn.getExampleCount(gesture.name);
+                    status.textContent = `✅ Ready - "${gesture.name}" (${count}) - Press Space`;
+                    status.className = 'capture-status ready';
+                }
+
+                if (hasModule && hasGesture) {
+                    const gesture = this.trainingModule.gestures[this.currentGestureIndex];
+                    const count = this.knn.getExampleCount(gesture.name);
+                    const progress = Math.min((count / 50) * 100, 100);
+                    this.el.capture_progress.style.width = `${progress}%`;
+                } else {
+                    this.el.capture_progress.style.width = '0%';
+                }
+            }
+
+            captureTrainingSample() {
+                if (!this.trainingModule || this.currentGestureIndex < 0) return;
+                if (!this.lastResults?.landmarks?.length) return;
+                if (this.captureCooldown) return;
+
+                const gesture = this.trainingModule.gestures[this.currentGestureIndex];
+                const features = this.featureExtractor.extractFeatures(this.lastResults.landmarks);
+                
+                if (!features) return;
+
+                this.knn.addExample(features, gesture.name);
+                gesture.sampleCount = this.knn.getExampleCount(gesture.name);
+                this.renderGestureList();
+
+                this.el.capture_flash.classList.add('active');
+                setTimeout(() => this.el.capture_flash.classList.remove('active'), 150);
+
+                this.captureCooldown = true;
+                setTimeout(() => {
+                    this.captureCooldown = false;
+                    this.updateCaptureStatus();
+                }, 150);
+
+                this.updateCaptureStatus();
+            }
+
+            clearCurrentGestureSamples() {
+                if (!this.trainingModule || this.currentGestureIndex < 0) return;
+                const gesture = this.trainingModule.gestures[this.currentGestureIndex];
+                this.knn.clearLabel(gesture.name);
+                gesture.sampleCount = 0;
+                this.renderGestureList();
+                this.updateCaptureStatus();
+                this.toast.show(`Cleared: ${gesture.name}`, 'info');
+            }
+
+            async finishTraining() {
+                if (!this.trainingModule || this.trainingModule.gestures.length === 0) return;
+
+                let lowSamples = [];
+                for (const gesture of this.trainingModule.gestures) {
+                    const count = this.knn.getExampleCount(gesture.name);
+                    if (count < 10) lowSamples.push(`${gesture.name} (${count})`);
+                }
+
+                if (lowSamples.length > 0) {
+                    if (!confirm(`Low samples:\n${lowSamples.join('\n')}\n\nContinue anyway?`)) {
+                        return;
+                    }
+                }
+
+                this.trainingModule.knnData = this.knn.exportData();
+                this.trainingModule.gestures = this.trainingModule.gestures.map(g => ({
+                    ...g,
+                    sampleCount: this.knn.getExampleCount(g.name)
+                }));
+
+                await this.moduleDB.save(this.trainingModule);
+                this.modules.push(this.trainingModule);
+                
+                this.activeModuleId = this.trainingModule.id;
+                this.activeModuleType = 'trained';
+                
+                this.renderModuleList();
+
+                this.el.badge_model.innerHTML = `<span class="dot"></span> ${this.trainingModule.name.slice(0, 12)}`;
+                this.el.badge_model.classList.add('active');
+                this.logger.updateStat('model', this.trainingModule.name, true);
+
+                this.toast.show(`Saved: ${this.trainingModule.name}`, 'success');
+
+                this.trainingModule = null;
+                this.currentGestureIndex = -1;
+                this.el.module_name.value = '';
+                this.renderGestureList();
+                this.el.capture_progress.style.width = '0%';
+                this.el.btn_finish_training.disabled = true;
+                this.el.training_mode.checked = false;
+                this.isTrainingMode = false;
+
+                document.querySelector('[data-tab="modules"]').click();
+            }
+
+            populateVoices() {
+                const voices = this.voice.voices;
+                if (voices.length === 0) {
+                    this.el.voice_select.innerHTML = '<option>No voices</option>';
+                    return;
+                }
+
+                const currentIndex = this.voice.currentVoice ? 
+                    voices.findIndex(v => v.name === this.voice.currentVoice.name) : 0;
+
+                this.el.voice_select.innerHTML = voices.map((v, i) => 
+                    `<option value="${i}" ${i === currentIndex ? 'selected' : ''}>${v.name}</option>`
+                ).join('');
+            }
+        }
+
+        window.slis = new SLISApp();
+    </script>
+</body>
+</html>

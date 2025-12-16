@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLIS - Settings</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/theme.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+</head>
+<body class="theme-cyberpunk">
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-brand">
+                <span class="brand-icon">◈</span>
+                <span class="brand-name">SLIS</span>
+            </div>
+            <nav class="header-nav">
+                <a href="/" class="nav-link">Live</a>
+                <a href="/training" class="nav-link">Train</a>
+                <a href="/settings" class="nav-link active">Settings</a>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content settings-layout">
+            <div class="settings-container">
+                <!-- Vision Settings -->
+                <section class="settings-section">
+                    <h2 class="section-title">Vision</h2>
+                    
+                    <div class="setting-item">
+                        <label for="camera-select">Camera</label>
+                        <select id="camera-select" class="form-select">
+                            <option value="0">Default Camera</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="resolution-select">Resolution</label>
+                        <select id="resolution-select" class="form-select">
+                            <option value="640,480">640x480 (Low)</option>
+                            <option value="1280,720" selected>1280x720 (HD)</option>
+                            <option value="1920,1080">1920x1080 (Full HD)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="fps-slider">Target FPS</label>
+                        <div class="slider-container">
+                            <input type="range" id="fps-slider" min="15" max="60" value="30">
+                            <span class="slider-value" id="fps-value">30</span>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label>Features</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="enable-pose" checked>
+                                <span>Pose Estimation</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="enable-face" checked>
+                                <span>Face Detection</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="adaptive-sampling" checked>
+                                <span>Adaptive Sampling</span>
+                            </label>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Recognition Settings -->
+                <section class="settings-section">
+                    <h2 class="section-title">Recognition</h2>
+                    
+                    <div class="setting-item">
+                        <label for="model-select">Gesture Model</label>
+                        <select id="model-select" class="form-select">
+                            <option value="asl_base">ASL Base</option>
+                            <option value="custom">Custom (Trained)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="confidence-slider">Confidence Threshold</label>
+                        <div class="slider-container">
+                            <input type="range" id="confidence-slider" min="0.5" max="0.95" step="0.05" value="0.7">
+                            <span class="slider-value" id="confidence-value">70%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="window-slider">Temporal Window</label>
+                        <div class="slider-container">
+                            <input type="range" id="window-slider" min="5" max="30" value="15">
+                            <span class="slider-value" id="window-value">15 frames</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Voice Settings -->
+                <section class="settings-section">
+                    <h2 class="section-title">Voice</h2>
+                    
+                    <div class="setting-item">
+                        <label for="voice-select">Voice</label>
+                        <select id="voice-select" class="form-select">
+                            <option value="en_amy">Amy (English)</option>
+                            <option value="en_ryan">Ryan (English)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="rate-slider">Speech Rate</label>
+                        <div class="slider-container">
+                            <input type="range" id="rate-slider" min="0.5" max="2.0" step="0.1" value="1.0">
+                            <span class="slider-value" id="rate-value">1.0x</span>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="pitch-slider">Pitch</label>
+                        <div class="slider-container">
+                            <input type="range" id="pitch-slider" min="0.5" max="2.0" step="0.1" value="1.0">
+                            <span class="slider-value" id="pitch-value">1.0x</span>
+                        </div>
+                    </div>
+                    
+                    <button id="btn-test-voice" class="btn btn-secondary">
+                        Test Voice
+                    </button>
+                </section>
+
+                <!-- Language Settings -->
+                <section class="settings-section">
+                    <h2 class="section-title">Language</h2>
+                    
+                    <div class="setting-item">
+                        <label for="sign-language-select">Sign Language</label>
+                        <select id="sign-language-select" class="form-select">
+                            <option value="asl">American Sign Language (ASL)</option>
+                            <option value="bsl">British Sign Language (BSL)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="output-language-select">Output Language</label>
+                        <select id="output-language-select" class="form-select">
+                            <option value="en_US">English (US)</option>
+                            <option value="en_GB">English (UK)</option>
+                            <option value="es_ES">Spanish</option>
+                        </select>
+                    </div>
+                </section>
+
+                <!-- UI Settings -->
+                <section class="settings-section">
+                    <h2 class="section-title">Interface</h2>
+                    
+                    <div class="setting-item">
+                        <label>Display Options</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="show-landmarks" checked>
+                                <span>Show Landmarks</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="show-confidence" checked>
+                                <span>Show Confidence</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="high-contrast">
+                                <span>High Contrast Mode</span>
+                            </label>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Actions -->
+                <div class="settings-actions">
+                    <button id="btn-save" class="btn btn-primary">
+                        Save Settings
+                    </button>
+                    <button id="btn-reset" class="btn btn-secondary">
+                        Reset to Defaults
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/js/settings.js" type="module"></script>
+</body>
+</html>

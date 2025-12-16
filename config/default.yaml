@@ -1,0 +1,52 @@
+# SLIS Configuration
+# Sign Language Interpretation System
+
+server:
+  host: "0.0.0.0"
+  port: 8080
+
+vision:
+  camera_index: 0
+  resolution: [1280, 720]
+  target_fps: 30
+  adaptive_sampling: true
+  min_fps: 15
+  enable_pose: true
+  enable_face: true
+  enhance_low_light: true
+  denoise: false
+
+recognition:
+  model: "asl_base"
+  confidence_threshold: 0.7
+  temporal_window: 15
+  smoothing_factor: 0.3
+  device: "cpu"  # or "cuda" for GPU
+
+audio:
+  engine: "piper"  # piper, coqui, or espeak
+  voice: "en_amy"
+  rate: 1.0
+  pitch: 1.0
+  models_dir: "models/voices"
+
+training:
+  epochs: 50
+  batch_size: 32
+  learning_rate: 0.001
+  validation_split: 0.2
+  early_stopping_patience: 10
+  augmentation:
+    rotation_range: 15
+    scale_range: [0.9, 1.1]
+    translation_range: 0.1
+    noise_factor: 0.02
+    flip_horizontal: false
+
+ui:
+  theme: "cyberpunk"
+  show_landmarks: true
+  show_confidence: true
+
+models_dir: "models"
+data_dir: "data"

@@ -1,0 +1,11 @@
+{
+  "language": "English (US)",
+  "code": "en_US",
+  "signs": {
+    "hello": "Hello",
+    "thanks": "Thank you",
+    "yes": "Yes",
+    "no": "No",
+    "help": "Help"
+  }
+}

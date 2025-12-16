@@ -1,0 +1,10 @@
+# SLIS - Sign Language Interpretation System
+# Optional Python Backend Requirements
+# The main app runs entirely in the browser - no Python required!
+
+# If you want to use the optional Python server:
+fastapi>=0.100.0
+uvicorn[standard]>=0.23.0
+aiofiles>=23.0.0
+python-multipart>=0.0.6
+starlette>=0.27.0
