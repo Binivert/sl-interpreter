@@ -1,463 +1,197 @@
 <div align="center">
 
-![Security System Header](readme_assets/header-security.svg)
+![SLIS System Banner](assets/header-banner.svg)
+
+**Real-time sign language gesture recognition powered by MediaPipe and machine learning.**
+
+Translate hand gestures into text and speech directly in your browser—no installation required.
 
 </div>
 
-<br>
+![Divider](assets/divider-glow.svg)
 
-<img src="readme_assets/divider-cyber.svg" width="100%">
-
-<br>
-
-<!-- ═══════════════════════════════════════════════════════════════ -->
-<!-- SYSTEM OVERVIEW -->
-<!-- ═══════════════════════════════════════════════════════════════ -->
+## Screenshot
 
 <div align="center">
 
-![Overview](readme_assets/header-overview.svg)
+<!-- SCREENSHOT PLACEHOLDER: Replace with actual application screenshot -->
+<!-- Recommended: 1280x720 or 1920x1080 PNG/JPG -->
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                                                                 │
+│                    [ SCREENSHOT HERE ]                          │
+│                                                                 │
+│              Application interface screenshot                   │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
 
 </div>
 
-<br>
+![Divider](assets/divider-standard.svg)
 
-**Security System** is an advanced AI-powered surveillance platform that transforms any camera into an intelligent monitoring station. Built with cutting-edge computer vision technologies, it provides real-time person detection, facial recognition, motion analysis, and instant alerts—all controllable from your Telegram app.
+![Section: Overview](assets/section-overview.svg)
 
-The system combines **YOLOv8** for accurate person detection, **MediaPipe** for skeleton tracking, and **face_recognition** for trusted person identification. When an intruder enters a defined security zone, the system immediately triggers alarms, captures evidence, and sends notifications to your phone.
+## System Overview
 
-**Key Capabilities:**
-- 🎯 **Zero false positives** with YOLOv8 neural network detection
-- 🦴 **Full skeleton tracking** detects partial body intrusions (hands, feet, etc.)
-- 👤 **Trusted person recognition** automatically disarms for known faces
-- 📱 **Complete Telegram control** with inline buttons and real-time status
-- 🔥 **Motion heat mapping** visualizes activity patterns over time
-- 🎨 **Professional GUI** with night vision, recording, and zone drawing
+SLIS captures video from your webcam, detects hands using MediaPipe's 21-landmark model, extracts geometric features from hand poses, and classifies gestures using either pre-trained MediaPipe models or custom KNN classifiers you train yourself.
 
-<br>
+Recognized gestures are displayed on screen and optionally spoken aloud using the Web Speech API. The entire system runs client-side in the browser with no server communication required.
 
-<img src="readme_assets/divider-cyber.svg" width="100%">
+| Aspect | Detail |
+|:-------|:-------|
+| **Input** | Webcam video stream (640×480) |
+| **Detection** | MediaPipe HandLandmarker (21 points per hand) |
+| **Classification** | MediaPipe GestureRecognizer or KNN (k=5) |
+| **Output** | Text display + Text-to-Speech |
+| **Storage** | IndexedDB for trained modules |
+| **Deployment** | Single HTML file, zero dependencies |
 
-<br>
+![Divider](assets/divider-circuit.svg)
 
-<!-- ═══════════════════════════════════════════════════════════════ -->
-<!-- CORE FEATURES -->
-<!-- ═══════════════════════════════════════════════════════════════ -->
+![Section: Features](assets/section-features.svg)
 
-<div align="center">
-
-![Features](readme_assets/header-features.svg)
-
-<br><br>
+## Core Features
 
 | Feature | Description |
-|:-------:|:------------|
-| <img src="readme_assets/icon-yolo.svg" width="50"/> | **YOLOv8 Detection** — State-of-the-art neural network for accurate person detection with adjustable sensitivity (Low/Medium/High) |
-| <img src="readme_assets/icon-skeleton.svg" width="50"/> | **Skeleton Tracking** — MediaPipe pose estimation tracks 33 body landmarks for comprehensive breach detection |
-| <img src="readme_assets/icon-face.svg" width="50"/> | **Face Recognition** — Identifies trusted persons and automatically suppresses false alarms with personalized greetings |
-| <img src="readme_assets/icon-zone.svg" width="50"/> | **3D Security Zones** — Draw custom polygonal zones with animated visualization and real-time breach detection |
-| <img src="readme_assets/icon-motion.svg" width="50"/> | **Motion Heat Map** — Visualizes movement patterns with color-coded intensity overlay |
-| <img src="readme_assets/icon-telegram.svg" width="50"/> | **Telegram Integration** — Full remote control with inline buttons, live snapshots, and instant alerts |
-| <img src="readme_assets/icon-alarm.svg" width="50"/> | **Smart Alarm System** — Audio alerts with text-to-speech announcements and mute controls |
-| <img src="readme_assets/icon-camera.svg" width="50"/> | **Multi-Source Input** — Supports live cameras and video file playback with full transport controls |
-
-</div>
-
-<br>
-
-<img src="readme_assets/divider-cyber.svg" width="100%">
-
-<br>
-
-<!-- ═══════════════════════════════════════════════════════════════ -->
-<!-- HOW IT WORKS -->
-<!-- ═══════════════════════════════════════════════════════════════ -->
-
-<div align="center">
-
-![How It Works](readme_assets/header-howitworks.svg)
-
-<br><br>
-
-![Detection Flow Diagram](readme_assets/diagram-flow.svg)
-
-</div>
-
-<br>
-
-**Detection Pipeline Explained:**
-
-1. **Frame Capture** — Camera feed is captured at up to 30 FPS with configurable resolution (default 1280×720)
-
-2. **Preprocessing** — Frames are resized and normalized for optimal neural network performance
-
-3. **Parallel Detection** — Three detection modules run simultaneously:
-   - **YOLOv8** identifies person bounding boxes with confidence scores
-   - **MediaPipe Pose** extracts 33 skeleton landmarks for each detected person
-   - **Face Recognition** matches faces against the trusted database
-
-4. **Detection Fusion** — Results are merged to create comprehensive person profiles including:
-   - Bounding box coordinates
-   - Skeleton joint positions
-   - Partial body detections (hands, feet, torso)
-   - Face identity and trust status
-
-5. **Zone Analysis** — Each detection is checked against defined security zones:
-   - Full body overlap detection
-   - Individual landmark breach checking
-   - Partial body intrusion detection
-   - Motion-correlated breach verification
-
-6. **Alert Dispatch** — When breach is confirmed:
-   - Alarm sound triggers immediately
-   - TTS announces the intrusion
-   - Snapshot is captured and saved
-   - Telegram notification sent with photo
-   - Database logs the event
-
-<br>
-
-<img src="readme_assets/divider-cyber.svg" width="100%">
-
-<br>
-
-<!-- ═══════════════════════════════════════════════════════════════ -->
-<!-- SYSTEM COMPONENTS -->
-<!-- ═══════════════════════════════════════════════════════════════ -->
-
-<div align="center">
-
-![Components](readme_assets/header-components.svg)
-
-<br><br>
-
-<table>
-<tr>
-<th align="center">🧠 Core Engine</th>
-<th align="center">Module</th>
-<th align="center">Technology</th>
-<th align="center">Function</th>
-</tr>
-<tr>
-<td rowspan="3" align="center"><code>main.py</code><br><code>gui.py</code><br><code>config.py</code></td>
-<td align="center"><strong>Person Detection</strong></td>
-<td align="center">YOLOv8</td>
-<td>Neural network person detection with confidence scoring</td>
-</tr>
-<tr>
-<td align="center"><strong>Skeleton Tracking</strong></td>
-<td align="center">MediaPipe</td>
-<td>33-point pose estimation for partial body detection</td>
-</tr>
-<tr>
-<td align="center"><strong>Face Recognition</strong></td>
-<td align="center">face_recognition</td>
-<td>Trusted person identification with auto-processing</td>
-</tr>
-<tr>
-<th align="center">📡 Communication</th>
-<th align="center">Module</th>
-<th align="center">Protocol</th>
-<th align="center">Function</th>
-</tr>
-<tr>
-<td rowspan="2" align="center"><code>telegram_bot.py</code><br><code>audio.py</code></td>
-<td align="center"><strong>Remote Control</strong></td>
-<td align="center">Telegram API</td>
-<td>Inline buttons, live snapshots, instant alerts</td>
-</tr>
-<tr>
-<td align="center"><strong>Audio Alerts</strong></td>
-<td align="center">pyttsx3 + pygame</td>
-<td>Text-to-speech announcements and alarm sounds</td>
-</tr>
-<tr>
-<th align="center">💾 Data Layer</th>
-<th align="center">Module</th>
-<th align="center">Storage</th>
-<th align="center">Function</th>
-</tr>
-<tr>
-<td rowspan="2" align="center"><code>database.py</code><br><code>utils.py</code></td>
-<td align="center"><strong>Event Logging</strong></td>
-<td align="center">SQLite</td>
-<td>Persistent storage for events and daily statistics</td>
-</tr>
-<tr>
-<td align="center"><strong>Zone Management</strong></td>
-<td align="center">Memory</td>
-<td>Polygon geometry, 3D rendering, breach detection</td>
-</tr>
-</table>
-
-</div>
-
-<br>
-
-<img src="readme_assets/divider-cyber.svg" width="100%">
-
-<br>
-
-<!-- ═══════════════════════════════════════════════════════════════ -->
-<!-- INSTALLATION -->
-<!-- ═══════════════════════════════════════════════════════════════ -->
-
-<div align="center">
-
-![Installation](readme_assets/header-installation.svg)
-
-</div>
-
-<br>
-
-**Prerequisites:**
-- Python 3.10 or higher
-- Webcam or IP camera
-- Telegram account (for remote control)
-
-**Step 1: Clone the Repository**
-
-```bash
-git clone https://github.com/Binivert/Security-System.git
-cd Security-System
-```
-
-**Step 2: Create Virtual Environment**
-
-```bash
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-venv\Scripts\activate     # Windows
-```
-
-**Step 3: Install Dependencies**
-
-```bash
-pip install -r requirements.txt
-```
-
-**Step 4: Configure Telegram Bot**
-
-1. Create a bot via [@BotFather](https://t.me/botfather) on Telegram
-2. Copy your bot token
-3. Get your chat ID from [@userinfobot](https://t.me/userinfobot)
-4. Update `config.py` with your credentials:
-
-```python
-TELEGRAM_BOT_TOKEN = "your_bot_token_here"
-TELEGRAM_CHAT_ID = "your_chat_id_here"
-```
-
-**Step 6: Add Trusted Faces (Optional)**
-
-Place photos of trusted persons in the `trusted_faces/` folder. The system will automatically process them on startup.
-
-<br>
-
-<img src="readme_assets/divider-cyber.svg" width="100%">
-
-<br>
-
-<!-- ═══════════════════════════════════════════════════════════════ -->
-<!-- USAGE -->
-<!-- ═══════════════════════════════════════════════════════════════ -->
-
-<div align="center">
-
-![Usage](readme_assets/header-usage.svg)
-
-</div>
-
-<br>
-
-**Starting the System:**
-
-```bash
-python main.py
-```
-
-<div align="center">
-
-<br>
-
-<table>
-<tr>
-<th align="center">🖥️ GUI Controls</th>
-<th align="center">📱 Telegram Commands</th>
-<th align="center">⌨️ Keyboard Shortcuts</th>
-</tr>
-<tr>
-<td valign="top">
-
-| Control | Action |
-|:--------|:-------|
-| `🔒 ARM SYSTEM` | Activate monitoring |
-| `⏺ Record` | Start/stop recording |
-| `📸 Snap` | Capture snapshot |
-| `🔇 Mute` | Silence alarms |
-| `➕ New Zone` | Create security zone |
-| `✏️ Draw` | Add zone points |
-| `🤖 Auto-Detect` | Auto-detect corners |
-
-</td>
-<td valign="top">
-
-| Command | Description |
 |:--------|:------------|
-| `/arm` | Arm the system |
-| `/disarm` | Disarm the system |
-| `/snap` | Request snapshot |
-| `/status` | Get system status |
-| `/stats` | View daily stats |
-| `/mute` | Mute alarm |
-| `/unmute` | Unmute alarm |
-| `/record` | Start recording |
-| `/stoprecord` | Stop recording |
-| `/sensitivity` | Adjust sensitivity |
+| ![Icon](assets/icon-detection.svg) **Hand Detection** | Tracks up to 2 hands simultaneously with 21 landmarks each |
+| ![Icon](assets/icon-gesture.svg) **Gesture Recognition** | Classifies hand poses into named gestures with confidence scores |
+| ![Icon](assets/icon-training.svg) **Custom Training** | Train your own gestures by capturing samples directly in the UI |
+| ![Icon](assets/icon-voice.svg) **Voice Output** | Speaks recognized gestures using system TTS voices |
+| ![Icon](assets/icon-module.svg) **Module System** | Save, load, import, and export trained gesture modules |
+| ![Icon](assets/icon-skeleton.svg) **Skeleton Overlay** | Visual feedback showing detected hand structure |
+| ![Icon](assets/icon-settings.svg) **Adjustable Settings** | Configure confidence threshold, debounce timing, sensitivity |
+| ![Icon](assets/icon-offline.svg) **Offline Capable** | Works without internet after initial model load |
 
-</td>
-<td valign="top">
+![Divider](assets/divider-glow.svg)
 
-| Key | Action |
-|:----|:-------|
-| `A` | Toggle arm/disarm |
-| `R` | Toggle recording |
-| `Space` | Take snapshot |
-| `F11` | Toggle fullscreen |
-| `Esc` | Exit fullscreen |
+![Section: How It Works](assets/section-howitworks.svg)
 
-</td>
-</tr>
-</table>
+## How It Works
 
-</div>
+![Data Flow Diagram](assets/diagram-dataflow.svg)
 
-<br>
+### Processing Pipeline
 
-<img src="readme_assets/divider-cyber.svg" width="100%">
+Each video frame passes through these stages:
 
-<br>
+| Stage | Input | Output | Time |
+|:------|:------|:-------|:-----|
+| **Capture** | Webcam stream | RGB frame (640×480) | ~33ms |
+| **Detection** | RGB frame | 21 landmarks × 2 hands | ~15ms |
+| **Extraction** | Landmarks | 166-dim feature vector | <1ms |
+| **Classification** | Features | Gesture label + confidence | <5ms |
+| **Debounce** | Raw predictions | Filtered output | configurable |
+| **Output** | Filtered gesture | UI update + TTS | immediate |
 
-<!-- ═══════════════════════════════════════════════════════════════ -->
-<!-- FILE STRUCTURE -->
-<!-- ═══════════════════════════════════════════════════════════════ -->
+### Feature Vector Composition
 
-<div align="center">
+The 166-dimensional feature vector contains:
 
-![File Structure](readme_assets/header-structure.svg)
+| Component | Dimensions | Description |
+|:----------|:-----------|:------------|
+| Normalized XYZ | 63 | Wrist-centered coordinates for 21 landmarks |
+| Finger angles | 5 | Curl angle for each finger |
+| Fingertip distances | 5 | Distance from wrist to each fingertip |
+| Inter-finger distances | 10 | Pairwise distances between fingertips |
+| Second hand | 83 | Same features (zero-padded if absent) |
 
-</div>
+![Divider](assets/divider-standard.svg)
 
-<br>
+![Section: Structure](assets/section-structure.svg)
+
+## System Structure
+
+![Components Diagram](assets/diagram-components.svg)
+
+### Core Components
+
+| Component | Responsibility |
+|:----------|:---------------|
+| **SLISApp** | Main application controller, coordinates all subsystems |
+| **ModuleDB** | IndexedDB wrapper for persistent module storage |
+| **KNNClassifier** | K-nearest neighbors implementation for custom gestures |
+| **FeatureExtractor** | Converts landmarks to normalized feature vectors |
+| **MediaPipe** | Hand detection and pre-trained gesture recognition |
+
+### Training Workflow
+
+![Training Diagram](assets/diagram-training.svg)
+
+| Step | Action | Recommendation |
+|:-----|:-------|:---------------|
+| 1 | Create new module | Give it a descriptive name |
+| 2 | Add gesture | Enter gesture name (e.g., "Hello") |
+| 3 | Capture samples | Press SPACE to record, aim for 50+ samples |
+| 4 | Vary your pose | Different angles, distances, lighting |
+| 5 | Repeat for each gesture | More gestures = richer vocabulary |
+| 6 | Finish training | Module saves to IndexedDB automatically |
+
+![Divider](assets/divider-circuit.svg)
+
+![Section: Installation](assets/section-installation.svg)
+
+## Installation & File Structure
+
+```bash
+# Clone or download the repository
+git clone https://github.com/your-repo/slis.git
+cd slis
+
+# No build step required - open directly
+open index.html
+
+# Or serve locally for development
+python -m http.server 8000
+# Then visit http://localhost:8000
+```
+
+### Project Structure
 
 ```
-Security-System/
-├── main.py              # Application entry point
-├── gui.py               # PyQt6 GUI and main logic
-├── config.py            # Configuration settings
-├── detectors.py         # YOLOv8, MediaPipe, face recognition
-├── telegram_bot.py      # Telegram bot integration
-├── audio.py             # TTS and alarm system
-├── database.py          # SQLite event logging
-├── utils.py             # Zone management utilities
-├── requirements.txt     # Python dependencies
-├── trusted_faces/       # Trusted person photos
-├── recordings/          # Saved video recordings
-├── snapshots/           # Captured snapshots
-└── alerts/              # Alert evidence photos
+slis/
+├── index.html          # Complete application (single file)
+├── README.md           # This documentation
+└── assets/             # Optional: exported modules, screenshots
+    ├── *.task          # MediaPipe gesture recognizer models
+    └── *.json          # Exported trained modules
 ```
 
-<br>
+### Requirements
 
-<img src="readme_assets/divider-cyber.svg" width="100%">
+| Requirement | Minimum |
+|:------------|:--------|
+| Browser | Chrome 90+, Edge 90+, Firefox 90+ |
+| Camera | Any webcam |
+| Internet | Required only for initial model download |
 
-<br>
+![Divider](assets/divider-glow.svg)
 
-<!-- ═══════════════════════════════════════════════════════════════ -->
-<!-- DEMO -->
-<!-- ═══════════════════════════════════════════════════════════════ -->
+![Section: Demo](assets/section-demo.svg)
+
+## Demo
 
 <div align="center">
 
-![Demo](readme_assets/header-demo.svg)
-
-<br><br>
-
-<!-- VIDEO FRAME -->
-<img src="readme_assets/frame-top.svg" width="100%">
-
-<br>
-
-<!-- MAIN VIDEO DEMO -->
-https://github.com/user-attachments/assets/1c1affee-bd75-458a-82f8-8e7766e99833
-
-<br><br>
-
-<img src="readme_assets/frame-bottom.svg" width="100%">
-
-<br><br>
-
-<!-- TELEGRAM DEMO -->
-<h3>📱 Telegram Remote Control Demo</h3>
-
-<sub>Real-time alerts, snapshots, and full system control directly from your phone</sub>
-
-<br><br>
-
-<table>
-<tr>
-<td align="center" width="50%">
-
-<img src="readme_assets/frame-phone-top.svg" width="260">
-
-<img src="readme_assets/telegram-demo.png" width="260" style="border-radius: 14px;">
-
-<img src="readme_assets/frame-phone-bottom.svg" width="260">
-
-<br>
-
-<sub><strong>Live intrusion alert with snapshot</strong></sub>
-
-</td>
-
-<td align="left" width="50%">
-
-### What You’re Seeing
-
-- 🚨 Instant intrusion notification  
-- 📸 Auto-captured snapshot  
-- 🔘 Inline control buttons  
-- 🔐 Arm / Disarm remotely  
-- 🔇 Mute alarms instantly  
-
-<br>
-
-Designed for **speed, clarity, and zero friction** —  
-your security system responds in seconds, wherever you are.
-
-</td>
-</tr>
-</table>
+<!-- VIDEO PLACEHOLDER: Replace with actual demo video -->
+<!-- Recommended: MP4/WebM embed or YouTube/Vimeo link -->
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                                                                 │
+│                    [ DEMO VIDEO HERE ]                          │
+│                                                                 │
+│              Embed video or link to demonstration               │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
 
 </div>
 
-<br>
-
-<img src="readme_assets/divider-cyber.svg" width="100%">
-
-<br>
-
-
-<!-- ═══════════════════════════════════════════════════════════════ -->
-<!-- FOOTER -->
-<!-- ═══════════════════════════════════════════════════════════════ -->
+![Divider](assets/divider-standard.svg)
 
 <div align="center">
 
-![Footer](readme_assets/footer-cyber.svg)
-
-<br>
-
-
+![Footer](assets/footer.svg)
 
 </div>
