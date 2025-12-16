@@ -1,197 +1,266 @@
 <div align="center">
 
-![SLIS System Banner](assets/header-banner.svg)
+![SLIS Header](assets/header.svg)
 
-**Real-time sign language gesture recognition powered by MediaPipe and machine learning.**
+**AI-powered real-time sign language recognition using computer vision and machine learning.**
 
-Translate hand gestures into text and speech directly in your browser—no installation required.
-
-</div>
-
-![Divider](assets/divider-glow.svg)
-
-## Screenshot
-
-<div align="center">
-
-<!-- SCREENSHOT PLACEHOLDER: Replace with actual application screenshot -->
-<!-- Recommended: 1280x720 or 1920x1080 PNG/JPG -->
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                                                                 │
-│                    [ SCREENSHOT HERE ]                          │
-│                                                                 │
-│              Application interface screenshot                   │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-```
+Transform hand gestures into text and speech directly in your browser — no server required, no data leaves your device.
 
 </div>
 
-![Divider](assets/divider-standard.svg)
-
-![Section: Overview](assets/section-overview.svg)
+---
 
 ## System Overview
 
-SLIS captures video from your webcam, detects hands using MediaPipe's 21-landmark model, extracts geometric features from hand poses, and classifies gestures using either pre-trained MediaPipe models or custom KNN classifiers you train yourself.
+The Sign Language Interpretation System (SLIS) is a browser-based application that interprets sign language gestures in real-time. Using your webcam, it detects hand positions, extracts geometric features from 21 landmark points per hand, and classifies gestures using machine learning.
 
-Recognized gestures are displayed on screen and optionally spoken aloud using the Web Speech API. The entire system runs client-side in the browser with no server communication required.
+**Two Recognition Modes:**
 
-| Aspect | Detail |
-|:-------|:-------|
-| **Input** | Webcam video stream (640×480) |
-| **Detection** | MediaPipe HandLandmarker (21 points per hand) |
-| **Classification** | MediaPipe GestureRecognizer or KNN (k=5) |
-| **Output** | Text display + Text-to-Speech |
-| **Storage** | IndexedDB for trained modules |
-| **Deployment** | Single HTML file, zero dependencies |
+| Mode | Description |
+|:-----|:------------|
+| **Pre-trained** | MediaPipe's GestureRecognizer for common ASL gestures |
+| **Custom-trained** | K-Nearest Neighbors classifier you train with your own samples |
 
-![Divider](assets/divider-circuit.svg)
+All processing happens locally using WebAssembly and WebGL acceleration. No account required.
 
-![Section: Features](assets/section-features.svg)
+### Screenshot
+
+<div align="center">
+
+<!-- INSERT APPLICATION SCREENSHOT HERE -->
+<!-- Recommended: 1280x720 or 1920x1080 PNG/JPG showing the main interface -->
+`[ Application Screenshot Placeholder ]`
+
+</div>
+
+---
+
+![Divider](assets/divider.svg)
 
 ## Core Features
 
-| Feature | Description |
-|:--------|:------------|
-| ![Icon](assets/icon-detection.svg) **Hand Detection** | Tracks up to 2 hands simultaneously with 21 landmarks each |
-| ![Icon](assets/icon-gesture.svg) **Gesture Recognition** | Classifies hand poses into named gestures with confidence scores |
-| ![Icon](assets/icon-training.svg) **Custom Training** | Train your own gestures by capturing samples directly in the UI |
-| ![Icon](assets/icon-voice.svg) **Voice Output** | Speaks recognized gestures using system TTS voices |
-| ![Icon](assets/icon-module.svg) **Module System** | Save, load, import, and export trained gesture modules |
-| ![Icon](assets/icon-skeleton.svg) **Skeleton Overlay** | Visual feedback showing detected hand structure |
-| ![Icon](assets/icon-settings.svg) **Adjustable Settings** | Configure confidence threshold, debounce timing, sensitivity |
-| ![Icon](assets/icon-offline.svg) **Offline Capable** | Works without internet after initial model load |
+| Feature | Icon | Description |
+|:--------|:----:|:------------|
+| **Hand Detection** | ![Detection](assets/icon-detection.svg) | Tracks up to 2 hands simultaneously, extracting 21 3D landmark points per hand at 30+ FPS using MediaPipe |
+| **Gesture Recognition** | ![Recognition](assets/icon-recognition.svg) | Classifies hand poses with confidence scoring, temporal smoothing, and debounce filtering to prevent flickering |
+| **Voice Output** | ![Voice](assets/icon-voice.svg) | Converts recognized gestures to speech using the Web Speech API with configurable voice settings |
+| **Custom Training** | ![Training](assets/icon-training.svg) | Train your own gestures by capturing samples directly in the browser — no coding or external tools required |
+| **Persistent Storage** | ![Storage](assets/icon-storage.svg) | Saves trained models and settings to IndexedDB, preserving your data across browser sessions |
+| **Adaptive Interface** | ![Interface](assets/icon-interface.svg) | Resizable split-panel layout with draggable divider, skeleton overlay toggle, and responsive design |
 
-![Divider](assets/divider-glow.svg)
+---
 
-![Section: How It Works](assets/section-howitworks.svg)
+![Divider](assets/divider.svg)
 
 ## How It Works
 
-![Data Flow Diagram](assets/diagram-dataflow.svg)
+![Data Pipeline](assets/diagram-pipeline.svg)
 
-### Processing Pipeline
+### Processing Pipeline Explained
 
-Each video frame passes through these stages:
+The system processes video frames through six sequential stages:
 
-| Stage | Input | Output | Time |
-|:------|:------|:-------|:-----|
-| **Capture** | Webcam stream | RGB frame (640×480) | ~33ms |
-| **Detection** | RGB frame | 21 landmarks × 2 hands | ~15ms |
-| **Extraction** | Landmarks | 166-dim feature vector | <1ms |
-| **Classification** | Features | Gesture label + confidence | <5ms |
-| **Debounce** | Raw predictions | Filtered output | configurable |
-| **Output** | Filtered gesture | UI update + TTS | immediate |
+**Stage 1: Capture**
+The webcam captures RGB video frames at approximately 30 frames per second. Each frame is passed to the detection stage.
 
-### Feature Vector Composition
+**Stage 2: Detect**
+MediaPipe HandLandmarker (running as a WebAssembly module with WebGL acceleration) identifies hands in the frame and extracts 21 3D landmark points per hand. These landmarks represent key positions: wrist, thumb joints, finger joints, and fingertips.
 
-The 166-dimensional feature vector contains:
+**Stage 3: Extract**
+Raw landmarks are transformed into a normalized, rotation-invariant 166-dimensional feature vector:
 
-| Component | Dimensions | Description |
-|:----------|:-----------|:------------|
-| Normalized XYZ | 63 | Wrist-centered coordinates for 21 landmarks |
-| Finger angles | 5 | Curl angle for each finger |
-| Fingertip distances | 5 | Distance from wrist to each fingertip |
-| Inter-finger distances | 10 | Pairwise distances between fingertips |
-| Second hand | 83 | Same features (zero-padded if absent) |
+| Component | Dimensions | Purpose |
+|:----------|:-----------|:--------|
+| Normalized coordinates | 63 per hand | Wrist-centered XYZ positions for all 21 landmarks |
+| Finger angles | 5 per hand | Bend angle of each finger (thumb through pinky) |
+| Fingertip distances | 5 per hand | Distance from each fingertip to the wrist |
+| Inter-finger distances | 10 per hand | Pairwise distances between all fingertips |
 
-![Divider](assets/divider-standard.svg)
+**Stage 4: Classify**
+The feature vector is compared against stored training examples using K-Nearest Neighbors (k=5) with inverse distance weighting. The algorithm finds the 5 most similar stored gestures and votes on the classification.
 
-![Section: Structure](assets/section-structure.svg)
+**Stage 5: Filter**
+Results pass through confidence threshold and temporal debounce filters. This prevents rapid flickering between gestures and ensures only confident predictions are shown.
 
-## System Structure
+**Stage 6: Output**
+The recognized gesture is displayed as text and optionally spoken using the Web Speech API.
 
-![Components Diagram](assets/diagram-components.svg)
+### Processing Performance
+
+| Metric | Value |
+|:-------|:------|
+| Frame rate | ~30 FPS |
+| Detection latency | 15-25ms |
+| Total pipeline latency | 30-50ms |
+| Hands tracked | Up to 2 simultaneously |
+
+---
+
+![Divider](assets/divider.svg)
+
+## System Components
+
+![Architecture Diagram](assets/diagram-architecture.svg)
 
 ### Core Components
 
 | Component | Responsibility |
 |:----------|:---------------|
-| **SLISApp** | Main application controller, coordinates all subsystems |
-| **ModuleDB** | IndexedDB wrapper for persistent module storage |
-| **KNNClassifier** | K-nearest neighbors implementation for custom gestures |
-| **FeatureExtractor** | Converts landmarks to normalized feature vectors |
-| **MediaPipe** | Hand detection and pre-trained gesture recognition |
+| **SLISApp** | Main application controller managing state, camera lifecycle, UI coordination, and event handling |
+| **MediaPipe HandLandmarker** | WebAssembly module for real-time hand detection and landmark extraction with WebGL acceleration |
+| **FeatureExtractor** | Transforms raw landmark data into normalized, rotation-invariant feature vectors |
+| **KNNClassifier** | K-Nearest Neighbors classifier (k=5) with inverse distance weighting for gesture classification |
+| **GestureRecognizer** | MediaPipe's pre-trained model for common ASL signs (fallback mode) |
+| **ModuleDB** | IndexedDB wrapper providing persistent storage for trained models and configuration |
+| **SpeechSynthesis** | Web Speech API interface for text-to-speech output with voice selection |
 
-### Training Workflow
+### Data Flow Architecture
 
-![Training Diagram](assets/diagram-training.svg)
+```
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│   Webcam    │────▶│  MediaPipe  │────▶│  Features   │
+│   Input     │     │  Detection  │     │  Extractor  │
+└─────────────┘     └─────────────┘     └──────┬──────┘
+                                               │
+                    ┌─────────────┐     ┌──────▼──────┐
+                    │   Speech    │◀────│     KNN     │
+                    │   Output    │     │  Classifier │
+                    └─────────────┘     └──────┬──────┘
+                                               │
+                                        ┌──────▼──────┐
+                                        │  ModuleDB   │
+                                        │  (Storage)  │
+                                        └─────────────┘
+```
 
-| Step | Action | Recommendation |
-|:-----|:-------|:---------------|
-| 1 | Create new module | Give it a descriptive name |
-| 2 | Add gesture | Enter gesture name (e.g., "Hello") |
-| 3 | Capture samples | Press SPACE to record, aim for 50+ samples |
-| 4 | Vary your pose | Different angles, distances, lighting |
-| 5 | Repeat for each gesture | More gestures = richer vocabulary |
-| 6 | Finish training | Module saves to IndexedDB automatically |
+---
 
-![Divider](assets/divider-circuit.svg)
+![Divider](assets/divider.svg)
 
-![Section: Installation](assets/section-installation.svg)
+## Installation
 
-## Installation & File Structure
+### Pre-requirements
+
+| Requirement | Specification |
+|:------------|:--------------|
+| Browser | Chrome 90+, Edge 90+, Firefox 100+ |
+| Hardware | Webcam, WebGL 2.0 support |
+| Permissions | Camera access |
+| Storage | ~50MB for models and data |
+
+### Setup
 
 ```bash
-# Clone or download the repository
-git clone https://github.com/your-repo/slis.git
-cd slis
+# No build process required — single HTML file application
 
-# No build step required - open directly
-open index.html
+# Option 1: Direct file access
+# Open index.html in a modern browser
 
-# Or serve locally for development
+# Option 2: Local development server (Python)
 python -m http.server 8000
-# Then visit http://localhost:8000
+# Navigate to http://localhost:8000
+
+# Option 3: Local development server (Node.js)
+npx serve .
+# Navigate to the displayed URL
+
+# Option 4: Using the optional Python backend
+pip install -r requirements.txt
+uvicorn src.server:app --reload
 ```
 
-### Project Structure
+### Quick Start
 
-```
-slis/
-├── index.html          # Complete application (single file)
-├── README.md           # This documentation
-└── assets/             # Optional: exported modules, screenshots
-    ├── *.task          # MediaPipe gesture recognizer models
-    └── *.json          # Exported trained modules
-```
+1. Open `index.html` in Chrome or Edge
+2. Allow camera access when prompted
+3. Position your hand in front of the webcam
+4. Watch real-time gesture recognition in action
 
-### Requirements
+---
 
-| Requirement | Minimum |
-|:------------|:--------|
-| Browser | Chrome 90+, Edge 90+, Firefox 90+ |
-| Camera | Any webcam |
-| Internet | Required only for initial model download |
+![Divider](assets/divider.svg)
 
-![Divider](assets/divider-glow.svg)
+## Usage
 
-![Section: Demo](assets/section-demo.svg)
+![Usage Diagram](assets/diagram-usage.svg)
 
-## Demo
+### Recognition Mode
+
+The main interface displays your webcam feed with an overlay showing detected hand landmarks. Recognized gestures appear as text below the video, and can be spoken aloud.
+
+**Controls:**
+- **Toggle Skeleton**: Show/hide the hand landmark overlay
+- **Toggle Voice**: Enable/disable speech output
+- **Voice Selection**: Choose from available system voices
+
+### Training Mode
+
+Create custom gestures by capturing training samples:
+
+1. **Enter gesture name** in the training panel
+2. **Position your hand** to show the gesture
+3. **Click "Capture"** to record a sample (capture 10-20 samples per gesture)
+4. **Repeat** with variations in hand position and angle
+5. **Test** your gesture in recognition mode
+
+**Training Tips:**
+- Capture samples with slight variations in position and rotation
+- Use consistent lighting conditions
+- Include samples from different distances
+- Minimum 5 samples per gesture, recommended 15-20
+
+### Model Management
+
+| Action | Description |
+|:-------|:------------|
+| **Save Model** | Exports trained gestures to a downloadable JSON file |
+| **Load Model** | Imports a previously saved model file |
+| **Clear Model** | Removes all trained gestures from memory |
+| **Reset** | Clears current session and reloads defaults |
+
+---
+
+![Divider](assets/divider.svg)
+
+## File Structure
+
+| Path | Description |
+|:-----|:------------|
+| `index.html` | Complete application (HTML + CSS + JS) — single file, no build required |
+| `requirements.txt` | Optional Python backend dependencies |
+| `src/` | Optional Python server modules |
+| `src/__init__.py` | Package initialization with version info |
+| `readme/` | Documentation and assets |
+| `readme/readme.md` | This documentation file |
+| `readme/assets/` | SVG diagrams and icons |
+
+### Technology Stack
+
+| Layer | Technology |
+|:------|:-----------|
+| Frontend | Vanilla HTML5, CSS3, JavaScript (ES6+) |
+| Hand Detection | MediaPipe HandLandmarker (WebAssembly + WebGL) |
+| Classification | Custom KNN implementation |
+| Storage | IndexedDB |
+| Speech | Web Speech API |
+| Backend (optional) | FastAPI, Uvicorn |
+
+---
+
+![Divider](assets/divider.svg)
+
+## Demonstration
 
 <div align="center">
 
-<!-- VIDEO PLACEHOLDER: Replace with actual demo video -->
-<!-- Recommended: MP4/WebM embed or YouTube/Vimeo link -->
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                                                                 │
-│                    [ DEMO VIDEO HERE ]                          │
-│                                                                 │
-│              Embed video or link to demonstration               │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-```
+<!-- INSERT DEMO VIDEO HERE -->
+<!-- Recommended: MP4/WebM, 30-60 seconds, showing gesture recognition in action -->
+`[ Demo Video Placeholder ]`
+
+*Video demonstration showing real-time gesture recognition and custom training workflow*
 
 </div>
 
-![Divider](assets/divider-standard.svg)
-
-<div align="center">
+---
 
 ![Footer](assets/footer.svg)
-
-</div>
