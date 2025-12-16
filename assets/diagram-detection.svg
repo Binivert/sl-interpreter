@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 280">
+  <defs>
+    <linearGradient id="detBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#030508"/>
+      <stop offset="100%" style="stop-color:#0a0f1a"/>
+    </linearGradient>
+    <filter id="detGlow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  
+  <style>
+    @keyframes pulse { 0%,100%{opacity:0.6} 50%{opacity:1} }
+    @keyframes blink { 0%,100%{opacity:0.3} 50%{opacity:1} }
+    @keyframes flow { 0%{stroke-dashoffset:12} 100%{stroke-dashoffset:0} }
+    .pulse { animation: pulse 2s ease-in-out infinite; }
+    .blink { animation: blink 1.5s ease-in-out infinite; }
+    .flow { stroke-dasharray:6,6; animation: flow 0.8s linear infinite; }
+  </style>
+  
+  <rect width="700" height="280" fill="url(#detBg)"/>
+  <rect width="700" height="280" fill="none" stroke="#1a2744" stroke-width="1"/>
+  
+  <text x="350" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#64748b" letter-spacing="3">DETECTION PIPELINE</text>
+  
+  <!-- Webcam box -->
+  <g transform="translate(30, 50)" filter="url(#detGlow)" class="pulse">
+    <rect width="120" height="80" rx="6" fill="#0a0f1a" stroke="#00ffff" stroke-width="2"/>
+    <text x="60" y="35" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#00ffff" font-weight="bold">WEBCAM</text>
+    <text x="60" y="52" text-anchor="middle" font-family="monospace" font-size="9" fill="#64748b">getUserMedia</text>
+    <text x="60" y="68" text-anchor="middle" font-family="monospace" font-size="8" fill="#475569">640×480 @ 30fps</text>
+  </g>
+  
+  <!-- Arrow 1 -->
+  <line x1="150" y1="90" x2="180" y2="90" stroke="#00ffff" stroke-width="2" class="flow"/>
+  
+  <!-- MediaPipe box -->
+  <g transform="translate(180, 50)" filter="url(#detGlow)" class="pulse" style="animation-delay:0.3s">
+    <rect width="140" height="80" rx="6" fill="#0a0f1a" stroke="#a855f7" stroke-width="2"/>
+    <text x="70" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#a855f7" font-weight="bold">MEDIAPIPE</text>
+    <text x="70" y="42" text-anchor="middle" font-family="monospace" font-size="9" fill="#64748b">HandLandmarker</text>
+    <text x="70" y="58" text-anchor="middle" font-family="monospace" font-size="8" fill="#475569">WebAssembly</text>
+    <text x="70" y="72" text-anchor="middle" font-family="monospace" font-size="8" fill="#475569">+ WebGL</text>
+  </g>
+  
+  <!-- Arrow 2 -->
+  <line x1="320" y1="90" x2="350" y2="90" stroke="#a855f7" stroke-width="2" class="flow"/>
+  
+  <!-- Landmarks box -->
+  <g transform="translate(350, 50)" filter="url(#detGlow)" class="pulse" style="animation-delay:0.6s">
+    <rect width="130" height="80" rx="6" fill="#0a0f1a" stroke="#ff0080" stroke-width="2"/>
+    <text x="65" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#ff0080" font-weight="bold">LANDMARKS</text>
+    <text x="65" y="42" text-anchor="middle" font-family="monospace" font-size="9" fill="#64748b">21 points × 3D</text>
+    <text x="65" y="58" text-anchor="middle" font-family="monospace" font-size="8" fill="#475569">per hand</text>
+    <text x="65" y="72" text-anchor="middle" font-family="monospace" font-size="8" fill="#475569">max 2 hands</text>
+  </g>
+  
+  <!-- Arrow 3 -->
+  <line x1="480" y1="90" x2="510" y2="90" stroke="#ff0080" stroke-width="2" class="flow"/>
+  
+  <!-- Features box -->
+  <g transform="translate(510, 50)" filter="url(#detGlow)" class="pulse" style="animation-delay:0.9s">
+    <rect width="140" height="80" rx="6" fill="#22c55e" stroke="#22c55e" stroke-width="2"/>
+    <text x="70" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#052e16" font-weight="bold">FEATURES</text>
+    <text x="70" y="42" text-anchor="middle" font-family="monospace" font-size="9" fill="#052e16">166-dim vector</text>
+    <text x="70" y="58" text-anchor="middle" font-family="monospace" font-size="8" fill="#052e16">normalized</text>
+    <text x="70" y="72" text-anchor="middle" font-family="monospace" font-size="8" fill="#052e16">rotation-invariant</text>
+  </g>
+  
+  <!-- Hand visualization -->
+  <g transform="translate(350, 155)">
+    <rect x="0" y="0" width="300" height="110" rx="8" fill="#0a0f1a" stroke="#1a2744" stroke-width="1"/>
+    <text x="150" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#64748b">21 LANDMARK POINTS</text>
+    
+    <!-- Simplified hand landmark visualization -->
+    <g transform="translate(50, 35)">
+      <!-- Wrist -->
+      <circle cx="50" cy="60" r="4" fill="#00ffff" class="blink"/>
+      <text x="50" y="75" text-anchor="middle" font-family="monospace" font-size="7" fill="#475569">WRIST</text>
+      
+      <!-- Thumb -->
+      <circle cx="25" cy="50" r="3" fill="#a855f7" class="blink" style="animation-delay:0.1s"/>
+      <circle cx="15" cy="40" r="3" fill="#a855f7" class="blink" style="animation-delay:0.2s"/>
+      <circle cx="8" cy="30" r="3" fill="#a855f7" class="blink" style="animation-delay:0.3s"/>
+      <circle cx="5" cy="20" r="3" fill="#ff0080" class="blink" style="animation-delay:0.4s"/>
+      <line x1="50" y1="60" x2="25" y2="50" stroke="#475569" stroke-width="1"/>
+      <line x1="25" y1="50" x2="15" y2="40" stroke="#475569" stroke-width="1"/>
+      <line x1="15" y1="40" x2="8" y2="30" stroke="#475569" stroke-width="1"/>
+      <line x1="8" y1="30" x2="5" y2="20" stroke="#475569" stroke-width="1"/>
+      
+      <!-- Index -->
+      <circle cx="35" cy="35" r="3" fill="#a855f7" class="blink" style="animation-delay:0.15s"/>
+      <circle cx="30" cy="20" r="3" fill="#a855f7" class="blink" style="animation-delay:0.25s"/>
+      <circle cx="28" cy="8" r="3" fill="#ff0080" class="blink" style="animation-delay:0.35s"/>
+      <line x1="50" y1="60" x2="35" y2="35" stroke="#475569" stroke-width="1"/>
+      <line x1="35" y1="35" x2="30" y2="20" stroke="#475569" stroke-width="1"/>
+      <line x1="30" y1="20" x2="28" y2="8" stroke="#475569" stroke-width="1"/>
+      
+      <!-- Middle -->
+      <circle cx="50" cy="30" r="3" fill="#a855f7" class="blink" style="animation-delay:0.2s"/>
+      <circle cx="50" cy="15" r="3" fill="#a855f7" class="blink" style="animation-delay:0.3s"/>
+      <circle cx="50" cy="3" r="3" fill="#ff0080" class="blink" style="animation-delay:0.4s"/>
+      <line x1="50" y1="60" x2="50" y2="30" stroke="#475569" stroke-width="1"/>
+      <line x1="50" y1="30" x2="50" y2="15" stroke="#475569" stroke-width="1"/>
+      <line x1="50" y1="15" x2="50" y2="3" stroke="#475569" stroke-width="1"/>
+      
+      <!-- Ring -->
+      <circle cx="65" cy="32" r="3" fill="#a855f7" class="blink" style="animation-delay:0.25s"/>
+      <circle cx="70" cy="18" r="3" fill="#a855f7" class="blink" style="animation-delay:0.35s"/>
+      <circle cx="72" cy="6" r="3" fill="#ff0080" class="blink" style="animation-delay:0.45s"/>
+      <line x1="50" y1="60" x2="65" y2="32" stroke="#475569" stroke-width="1"/>
+      <line x1="65" y1="32" x2="70" y2="18" stroke="#475569" stroke-width="1"/>
+      <line x1="70" y1="18" x2="72" y2="6" stroke="#475569" stroke-width="1"/>
+      
+      <!-- Pinky -->
+      <circle cx="78" cy="38" r="3" fill="#a855f7" class="blink" style="animation-delay:0.3s"/>
+      <circle cx="85" cy="28" r="3" fill="#a855f7" class="blink" style="animation-delay:0.4s"/>
+      <circle cx="90" cy="18" r="3" fill="#ff0080" class="blink" style="animation-delay:0.5s"/>
+      <line x1="50" y1="60" x2="78" y2="38" stroke="#475569" stroke-width="1"/>
+      <line x1="78" y1="38" x2="85" y2="28" stroke="#475569" stroke-width="1"/>
+      <line x1="85" y1="28" x2="90" y2="18" stroke="#475569" stroke-width="1"/>
+    </g>
+    
+    <!-- Legend -->
+    <g transform="translate(170, 45)">
+      <circle cx="0" cy="0" r="3" fill="#00ffff"/>
+      <text x="10" y="3" font-family="monospace" font-size="8" fill="#64748b">Wrist</text>
+      <circle cx="0" cy="15" r="3" fill="#a855f7"/>
+      <text x="10" y="18" font-family="monospace" font-size="8" fill="#64748b">Joints</text>
+      <circle cx="0" cy="30" r="3" fill="#ff0080"/>
+      <text x="10" y="33" font-family="monospace" font-size="8" fill="#64748b">Fingertips</text>
+    </g>
+  </g>
+</svg>

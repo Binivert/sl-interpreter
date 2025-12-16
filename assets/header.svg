@@ -1,0 +1,163 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 350">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#030508"/>
+      <stop offset="50%" style="stop-color:#0a0f1a"/>
+      <stop offset="100%" style="stop-color:#050810"/>
+    </linearGradient>
+    <linearGradient id="titleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00ffff"/>
+      <stop offset="50%" style="stop-color:#a855f7"/>
+      <stop offset="100%" style="stop-color:#ff0080"/>
+    </linearGradient>
+    <linearGradient id="accentLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00ffff;stop-opacity:0"/>
+      <stop offset="50%" style="stop-color:#00ffff;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#00ffff;stop-opacity:0"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="strongGlow">
+      <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glitch">
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0">
+        <animate attributeName="values" dur="0.5s" repeatCount="indefinite" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0;1 0 0 0 0.03  0 1 0 0 0  0 0 1 0 -0.03  0 0 0 1 0;1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+      </feColorMatrix>
+    </filter>
+  </defs>
+  
+  <style>
+    @keyframes pulse { 0%,100%{opacity:0.3} 50%{opacity:0.9} }
+    @keyframes nodePulse { 0%,100%{r:4;opacity:0.6} 50%{r:6;opacity:1} }
+    @keyframes flicker { 0%,100%{opacity:1} 92%{opacity:1} 93%{opacity:0.3} 94%{opacity:1} 96%{opacity:0.8} 97%{opacity:1} }
+    @keyframes scan { 0%{stroke-dashoffset:20} 100%{stroke-dashoffset:0} }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
+    @keyframes codeScroll { 0%{transform:translateY(0)} 100%{transform:translateY(-20px)} }
+    .grid { stroke:#1a2744; stroke-width:0.5; opacity:0.5; }
+    .pulse { animation: pulse 3s ease-in-out infinite; }
+    .pulse-d1 { animation: pulse 3s ease-in-out infinite 0.5s; }
+    .pulse-d2 { animation: pulse 3s ease-in-out infinite 1s; }
+    .node { animation: nodePulse 2s ease-in-out infinite; }
+    .node-d1 { animation: nodePulse 2s ease-in-out infinite 0.3s; }
+    .node-d2 { animation: nodePulse 2s ease-in-out infinite 0.6s; }
+    .node-d3 { animation: nodePulse 2s ease-in-out infinite 0.9s; }
+    .flicker { animation: flicker 4s ease-in-out infinite; }
+    .scan { stroke-dasharray:10,10; animation: scan 1s linear infinite; }
+    .float { animation: float 3s ease-in-out infinite; }
+  </style>
+  
+  <rect width="900" height="350" fill="url(#bgGrad)"/>
+  
+  <!-- Animated grid background -->
+  <g class="pulse">
+    <line x1="0" y1="50" x2="900" y2="50" class="grid"/>
+    <line x1="0" y1="100" x2="900" y2="100" class="grid"/>
+    <line x1="0" y1="150" x2="900" y2="150" class="grid"/>
+    <line x1="0" y1="250" x2="900" y2="250" class="grid"/>
+    <line x1="0" y1="300" x2="900" y2="300" class="grid"/>
+    <line x1="150" y1="0" x2="150" y2="350" class="grid"/>
+    <line x1="300" y1="0" x2="300" y2="350" class="grid"/>
+    <line x1="600" y1="0" x2="600" y2="350" class="grid"/>
+    <line x1="750" y1="0" x2="750" y2="350" class="grid"/>
+  </g>
+  
+  <!-- Corner brackets -->
+  <g stroke="#00ffff" stroke-width="2" fill="none" opacity="0.8" filter="url(#glow)">
+    <path d="M15 50 L15 15 L50 15"/>
+    <path d="M850 15 L885 15 L885 50"/>
+    <path d="M15 300 L15 335 L50 335"/>
+    <path d="M850 335 L885 335 L885 300"/>
+  </g>
+  
+  <!-- Code rain effect (left side) -->
+  <g font-family="monospace" font-size="8" fill="#00ffff" opacity="0.3">
+    <text x="30" y="80" class="pulse">01101</text>
+    <text x="35" y="120" class="pulse-d1">10010</text>
+    <text x="25" y="160" class="pulse-d2">11001</text>
+    <text x="40" y="200" class="pulse">01110</text>
+  </g>
+  
+  <!-- Code rain effect (right side) -->
+  <g font-family="monospace" font-size="8" fill="#ff0080" opacity="0.3">
+    <text x="840" y="90" class="pulse-d1">10110</text>
+    <text x="835" y="130" class="pulse-d2">01001</text>
+    <text x="845" y="170" class="pulse">11100</text>
+    <text x="830" y="210" class="pulse-d1">00111</text>
+  </g>
+  
+  <!-- Logo: Hexagonal neural network -->
+  <g transform="translate(115, 175)" filter="url(#glow)" class="float">
+    <!-- Outer hexagon -->
+    <polygon points="0,-60 52,-30 52,30 0,60 -52,30 -52,-30" fill="none" stroke="url(#titleGrad)" stroke-width="2.5" class="flicker"/>
+    <!-- Middle hexagon -->
+    <polygon points="0,-40 35,-20 35,20 0,40 -35,20 -35,-20" fill="none" stroke="#00ffff" stroke-width="1.5" opacity="0.5"/>
+    <!-- Inner hexagon -->
+    <polygon points="0,-20 17,-10 17,10 0,20 -17,10 -17,-10" fill="url(#titleGrad)" opacity="0.2"/>
+    <!-- Connection lines -->
+    <line x1="0" y1="-60" x2="0" y2="-40" stroke="#00ffff" stroke-width="1.5" class="scan"/>
+    <line x1="52" y1="-30" x2="35" y2="-20" stroke="#a855f7" stroke-width="1.5" class="scan"/>
+    <line x1="52" y1="30" x2="35" y2="20" stroke="#ff0080" stroke-width="1.5" class="scan"/>
+    <line x1="0" y1="60" x2="0" y2="40" stroke="#ff0080" stroke-width="1.5" class="scan"/>
+    <line x1="-52" y1="30" x2="-35" y2="20" stroke="#a855f7" stroke-width="1.5" class="scan"/>
+    <line x1="-52" y1="-30" x2="-35" y2="-20" stroke="#00ffff" stroke-width="1.5" class="scan"/>
+    <!-- Outer nodes -->
+    <circle cx="0" cy="-60" r="6" fill="#00ffff" class="node"/>
+    <circle cx="52" cy="-30" r="6" fill="#00ffff" class="node-d1"/>
+    <circle cx="52" cy="30" r="6" fill="#a855f7" class="node-d2"/>
+    <circle cx="0" cy="60" r="6" fill="#ff0080" class="node-d3"/>
+    <circle cx="-52" cy="30" r="6" fill="#a855f7" class="node-d2"/>
+    <circle cx="-52" cy="-30" r="6" fill="#00ffff" class="node-d1"/>
+    <!-- Center core -->
+    <circle cx="0" cy="0" r="12" fill="#ffffff" class="flicker"/>
+    <circle cx="0" cy="0" r="6" fill="#00ffff"/>
+    <!-- Neural connections -->
+    <line x1="0" y1="-20" x2="0" y2="-40" stroke="#00ffff" stroke-width="1" opacity="0.6"/>
+    <line x1="17" y1="-10" x2="35" y2="-20" stroke="#a855f7" stroke-width="1" opacity="0.6"/>
+    <line x1="17" y1="10" x2="35" y2="20" stroke="#ff0080" stroke-width="1" opacity="0.6"/>
+  </g>
+  
+  <!-- Main title -->
+  <text x="480" y="120" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="44" font-weight="900" fill="url(#titleGrad)" filter="url(#strongGlow)" class="flicker">SIGN LANGUAGE</text>
+  <text x="480" y="175" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="44" font-weight="900" fill="url(#titleGrad)" filter="url(#strongGlow)" class="flicker">INTERPRETATION SYSTEM</text>
+  
+  <!-- Subtitle -->
+  <text x="480" y="215" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#64748b" letter-spacing="6">AI-POWERED GESTURE RECOGNITION</text>
+  
+  <!-- Glitch line effect -->
+  <rect x="200" y="225" width="500" height="1" fill="#00ffff" opacity="0.5" class="pulse"/>
+  
+  <!-- Version badge -->
+  <g transform="translate(480, 260)">
+    <rect x="-35" y="0" width="70" height="28" rx="14" fill="#0f172a" stroke="#00ffff" stroke-width="1.5" class="pulse"/>
+    <text x="0" y="19" text-anchor="middle" font-family="monospace" font-size="13" fill="#00ffff" font-weight="bold">v1</text>
+  </g>
+  
+  <!-- Status indicators -->
+  <g transform="translate(480, 310)">
+    <circle cx="-80" cy="0" r="4" fill="#22c55e" class="node"/>
+    <text x="-65" y="4" font-family="monospace" font-size="10" fill="#64748b">ONLINE</text>
+    <text x="-10" y="4" font-family="monospace" font-size="10" fill="#475569">|</text>
+    <circle cx="20" cy="0" r="4" fill="#a855f7" class="node-d1"/>
+    <text x="35" y="4" font-family="monospace" font-size="10" fill="#64748b">BROWSER</text>
+  </g>
+  
+  <!-- Decorative nodes -->
+  <circle cx="800" cy="80" r="3" fill="#00ffff" class="node" filter="url(#glow)"/>
+  <circle cx="830" cy="260" r="3" fill="#a855f7" class="node-d2" filter="url(#glow)"/>
+  <circle cx="70" cy="280" r="3" fill="#ff0080" class="node-d1" filter="url(#glow)"/>
+  <circle cx="100" cy="70" r="3" fill="#00ffff" class="node-d3" filter="url(#glow)"/>
+  
+  <!-- Terminal prompt decoration -->
+  <g transform="translate(720, 320)" font-family="monospace" font-size="9" fill="#475569">
+    <text x="0" y="0">$ ./slis --start</text>
+    <rect x="95" y="-8" width="6" height="10" fill="#00ffff" class="pulse"/>
+  </g>
+  
+  <!-- Top/bottom accent lines -->
+  <rect x="0" y="0" width="900" height="3" fill="url(#accentLine)" class="pulse"/>
+  <rect x="0" y="347" width="900" height="3" fill="url(#accentLine)" class="pulse-d1"/>
+</svg>

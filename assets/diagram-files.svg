@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300">
+  <defs>
+    <linearGradient id="filesBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#030508"/>
+      <stop offset="100%" style="stop-color:#0a0f1a"/>
+    </linearGradient>
+    <filter id="filesGlow">
+      <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  
+  <style>
+    @keyframes pulse { 0%,100%{opacity:0.7} 50%{opacity:1} }
+    @keyframes blink { 0%,100%{opacity:0.4} 50%{opacity:1} }
+    .pulse { animation: pulse 2s ease-in-out infinite; }
+    .blink { animation: blink 1.5s ease-in-out infinite; }
+  </style>
+  
+  <rect width="600" height="300" fill="url(#filesBg)"/>
+  <rect width="600" height="300" fill="none" stroke="#1a2744" stroke-width="1"/>
+  
+  <text x="300" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#64748b" letter-spacing="3">FILE STRUCTURE</text>
+  
+  <!-- Root folder -->
+  <g transform="translate(30, 50)" filter="url(#filesGlow)">
+    <rect width="180" height="35" rx="4" fill="#0a0f1a" stroke="#eab308" stroke-width="2" class="pulse"/>
+    <text x="15" y="22" font-family="monospace" font-size="11" fill="#eab308">📁 sign-language-system/</text>
+  </g>
+  
+  <!-- index.html -->
+  <g transform="translate(60, 95)" filter="url(#filesGlow)">
+    <rect width="200" height="30" rx="4" fill="#0a0f1a" stroke="#22c55e" stroke-width="1.5" class="pulse" style="animation-delay:0.1s"/>
+    <text x="12" y="19" font-family="monospace" font-size="10" fill="#22c55e">📄 index.html</text>
+    <text x="115" y="19" font-family="monospace" font-size="8" fill="#475569">Main App</text>
+  </g>
+  
+  <!-- requirements.txt -->
+  <g transform="translate(60, 130)" filter="url(#filesGlow)">
+    <rect width="200" height="30" rx="4" fill="#0a0f1a" stroke="#a855f7" stroke-width="1.5" class="pulse" style="animation-delay:0.2s"/>
+    <text x="12" y="19" font-family="monospace" font-size="10" fill="#a855f7">📄 requirements.txt</text>
+    <text x="145" y="19" font-family="monospace" font-size="8" fill="#475569">Python</text>
+  </g>
+  
+  <!-- src folder -->
+  <g transform="translate(60, 165)" filter="url(#filesGlow)">
+    <rect width="150" height="30" rx="4" fill="#0a0f1a" stroke="#00ffff" stroke-width="1.5" class="pulse" style="animation-delay:0.3s"/>
+    <text x="12" y="19" font-family="monospace" font-size="10" fill="#00ffff">📁 src/</text>
+    <text x="60" y="19" font-family="monospace" font-size="8" fill="#475569">Backend</text>
+  </g>
+  
+  <!-- __init__.py -->
+  <g transform="translate(90, 200)" filter="url(#filesGlow)">
+    <rect width="170" height="25" rx="4" fill="#0a0f1a" stroke="#06b6d4" stroke-width="1" class="blink"/>
+    <text x="12" y="16" font-family="monospace" font-size="9" fill="#06b6d4">📄 __init__.py</text>
+    <text x="110" y="16" font-family="monospace" font-size="7" fill="#475569">v2.0.0</text>
+  </g>
+  
+  <!-- readme folder -->
+  <g transform="translate(60, 235)" filter="url(#filesGlow)">
+    <rect width="150" height="30" rx="4" fill="#0a0f1a" stroke="#ff0080" stroke-width="1.5" class="pulse" style="animation-delay:0.4s"/>
+    <text x="12" y="19" font-family="monospace" font-size="10" fill="#ff0080">📁 readme/</text>
+    <text x="85" y="19" font-family="monospace" font-size="8" fill="#475569">Docs</text>
+  </g>
+  
+  <!-- Legend -->
+  <g transform="translate(350, 60)">
+    <rect width="220" height="200" rx="6" fill="#0a0f1a" stroke="#1a2744" stroke-width="1"/>
+    <text x="110" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#64748b">FILE TYPES</text>
+    
+    <rect x="15" y="40" width="12" height="12" rx="2" fill="#22c55e"/>
+    <text x="35" y="50" font-family="monospace" font-size="9" fill="#64748b">Main Application</text>
+    
+    <rect x="15" y="60" width="12" height="12" rx="2" fill="#a855f7"/>
+    <text x="35" y="70" font-family="monospace" font-size="9" fill="#64748b">Python Dependencies</text>
+    
+    <rect x="15" y="80" width="12" height="12" rx="2" fill="#00ffff"/>
+    <text x="35" y="90" font-family="monospace" font-size="9" fill="#64748b">Backend Module</text>
+    
+    <rect x="15" y="100" width="12" height="12" rx="2" fill="#ff0080"/>
+    <text x="35" y="110" font-family="monospace" font-size="9" fill="#64748b">Documentation</text>
+    
+    <rect x="15" y="120" width="12" height="12" rx="2" fill="#eab308"/>
+    <text x="35" y="130" font-family="monospace" font-size="9" fill="#64748b">Root Directory</text>
+    
+    <line x1="15" y1="145" x2="205" y2="145" stroke="#1a2744" stroke-width="1"/>
+    
+    <text x="110" y="165" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#475569">Single HTML file contains</text>
+    <text x="110" y="180" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#475569">HTML + CSS + JavaScript</text>
+  </g>
+</svg>

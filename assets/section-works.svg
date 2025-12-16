@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 50">
+  <defs>
+    <linearGradient id="worksGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00ffff"/>
+      <stop offset="100%" style="stop-color:#22c55e"/>
+    </linearGradient>
+    <filter id="worksGlow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <style>
+    @keyframes pulse { 0%,100%{opacity:0.7} 50%{opacity:1} }
+    @keyframes blink { 0%,100%{opacity:0.3} 50%{opacity:1} }
+    .pulse { animation: pulse 2s ease-in-out infinite; }
+    .blink { animation: blink 1s ease-in-out infinite; }
+  </style>
+  <rect width="400" height="50" fill="#0a0f1a"/>
+  <rect x="0" y="0" width="4" height="50" fill="url(#worksGrad)" class="pulse"/>
+  <text x="20" y="32" font-family="Arial Black, sans-serif" font-size="18" fill="url(#worksGrad)" filter="url(#worksGlow)">HOW IT WORKS</text>
+  <circle cx="380" cy="25" r="4" fill="#22c55e" class="blink" filter="url(#worksGlow)"/>
+</svg>

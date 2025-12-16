@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40">
+  <defs>
+    <filter id="voiceGlow">
+      <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <style>
+    @keyframes wave { 0%,100%{transform:scaleY(0.5);opacity:0.4} 50%{transform:scaleY(1);opacity:1} }
+    .wave { transform-origin: center bottom; }
+    .w1 { animation: wave 0.7s ease-in-out infinite; }
+    .w2 { animation: wave 0.7s ease-in-out infinite 0.1s; }
+    .w3 { animation: wave 0.7s ease-in-out infinite 0.2s; }
+    .w4 { animation: wave 0.7s ease-in-out infinite 0.3s; }
+    .w5 { animation: wave 0.7s ease-in-out infinite 0.4s; }
+  </style>
+  <rect x="6" y="14" width="4" height="14" rx="2" fill="#22c55e" class="wave w1" filter="url(#voiceGlow)"/>
+  <rect x="12" y="10" width="4" height="22" rx="2" fill="#22c55e" class="wave w2" filter="url(#voiceGlow)"/>
+  <rect x="18" y="6" width="4" height="30" rx="2" fill="#22c55e" class="wave w3" filter="url(#voiceGlow)"/>
+  <rect x="24" y="10" width="4" height="22" rx="2" fill="#22c55e" class="wave w4" filter="url(#voiceGlow)"/>
+  <rect x="30" y="14" width="4" height="14" rx="2" fill="#22c55e" class="wave w5" filter="url(#voiceGlow)"/>
+</svg>
