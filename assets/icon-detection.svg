@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
-  <style>
-    @keyframes scan { 0%,100%{opacity:0.4} 50%{opacity:1} }
-    .scanLine { animation: scan 1.5s ease-in-out infinite; }
-  </style>
-  <rect x="2" y="2" width="20" height="20" rx="3" fill="none" stroke="#00f0ff" stroke-width="1.5"/>
-  <circle cx="12" cy="12" r="5" fill="none" stroke="#00f0ff" stroke-width="1" class="scanLine"/>
-  <circle cx="12" cy="12" r="2" fill="#00f0ff"/>
-</svg>

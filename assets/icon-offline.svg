@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
-  <style>
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.5} }
-    .offBlink { animation: blink 2s ease-in-out infinite; }
-  </style>
-  <circle cx="12" cy="12" r="9" fill="none" stroke="#00ff88" stroke-width="1.5"/>
-  <path d="M8 12 L11 15 L16 9" stroke="#00ff88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" class="offBlink"/>
-</svg>
