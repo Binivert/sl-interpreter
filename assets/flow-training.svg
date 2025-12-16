@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300">
+  <defs>
+    <linearGradient id="trainBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0e17"/>
+      <stop offset="100%" style="stop-color:#0d1219"/>
+    </linearGradient>
+    <filter id="trainGlow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <rect width="800" height="300" fill="url(#trainBg)"/>
+  
+  <text x="400" y="25" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="14" font-weight="700" fill="#eab308" filter="url(#trainGlow)">TRAINING WORKFLOW</text>
+  
+  <!-- Flow nodes -->
+  <g transform="translate(50, 50)">
+    <!-- Start -->
+    <circle cx="50" cy="50" r="25" fill="#0d1219" stroke="#22c55e" stroke-width="2" filter="url(#trainGlow)"/>
+    <text x="50" y="55" text-anchor="middle" font-family="'Consolas', monospace" font-size="8" fill="#22c55e">START</text>
+    
+    <!-- Arrow -->
+    <line x1="75" y1="50" x2="120" y2="50" stroke="#22c55e" stroke-width="2"/>
+    <polygon points="115,45 125,50 115,55" fill="#22c55e"/>
+    
+    <!-- Create Module -->
+    <rect x="130" y="30" width="80" height="40" rx="4" fill="#0d1219" stroke="#00d4ff" stroke-width="1"/>
+    <text x="170" y="55" text-anchor="middle" font-family="'Consolas', monospace" font-size="7" fill="#00d4ff">CREATE</text>
+    <text x="170" y="65" text-anchor="middle" font-family="'Consolas', monospace" font-size="6" fill="#64748b">MODULE</text>
+    
+    <line x1="210" y1="50" x2="250" y2="50" stroke="#00d4ff" stroke-width="2"/>
+    <polygon points="245,45 255,50 245,55" fill="#00d4ff"/>
+    
+    <!-- Add Gesture -->
+    <rect x="260" y="30" width="80" height="40" rx="4" fill="#0d1219" stroke="#a855f7" stroke-width="1"/>
+    <text x="300" y="55" text-anchor="middle" font-family="'Consolas', monospace" font-size="7" fill="#a855f7">ADD</text>
+    <text x="300" y="65" text-anchor="middle" font-family="'Consolas', monospace" font-size="6" fill="#64748b">GESTURE</text>
+    
+    <line x1="340" y1="50" x2="380" y2="50" stroke="#a855f7" stroke-width="2"/>
+    <polygon points="375,45 385,50 375,55" fill="#a855f7"/>
+    
+    <!-- Capture -->
+    <rect x="390" y="30" width="80" height="40" rx="4" fill="#0d1219" stroke="#ec4899" stroke-width="1"/>
+    <text x="430" y="55" text-anchor="middle" font-family="'Consolas', monospace" font-size="7" fill="#ec4899">CAPTURE</text>
+    <text x="430" y="65" text-anchor="middle" font-family="'Consolas', monospace" font-size="6" fill="#64748b">SAMPLES</text>
+    
+    <line x1="470" y1="50" x2="510" y2="50" stroke="#ec4899" stroke-width="2"/>
+    <polygon points="505,45 515,50 505,55" fill="#ec4899"/>
+    
+    <!-- Check -->
+    <polygon points="560,20 600,50 560,80 520,50" fill="#0d1219" stroke="#eab308" stroke-width="1"/>
+    <text x="560" y="53" text-anchor="middle" font-family="'Consolas', monospace" font-size="6" fill="#eab308">ENOUGH?</text>
+    
+    <!-- Loop back -->
+    <path d="M 560 80 Q 560 120 430 120 Q 300 120 300 70" fill="none" stroke="#eab308" stroke-width="1" stroke-dasharray="4,2"/>
+    <text x="430" y="135" text-anchor="middle" font-family="'Consolas', monospace" font-size="6" fill="#64748b">NO - More samples</text>
+    
+    <!-- Yes path -->
+    <line x1="600" y1="50" x2="640" y2="50" stroke="#22c55e" stroke-width="2"/>
+    <polygon points="635,45 645,50 635,55" fill="#22c55e"/>
+    <text x="620" y="40" font-family="'Consolas', monospace" font-size="6" fill="#22c55e">YES</text>
+    
+    <!-- Finish -->
+    <rect x="650" y="30" width="80" height="40" rx="4" fill="#0d1219" stroke="#22c55e" stroke-width="2" filter="url(#trainGlow)"/>
+    <text x="690" y="55" text-anchor="middle" font-family="'Consolas', monospace" font-size="7" fill="#22c55e">FINISH</text>
+    <text x="690" y="65" text-anchor="middle" font-family="'Consolas', monospace" font-size="6" fill="#64748b">TRAINING</text>
+  </g>
+  
+  <!-- Second row - Save flow -->
+  <g transform="translate(50, 170)">
+    <line x1="640" y1="-50" x2="640" y2="20" stroke="#22c55e" stroke-width="2"/>
+    <polygon points="635,15 640,25 645,15" fill="#22c55e"/>
+    
+    <!-- Save to DB -->
+    <rect x="260" y="30" width="80" height="40" rx="4" fill="#0d1219" stroke="#00d4ff" stroke-width="1"/>
+    <text x="300" y="55" text-anchor="middle" font-family="'Consolas', monospace" font-size="7" fill="#00d4ff">SAVE TO</text>
+    <text x="300" y="65" text-anchor="middle" font-family="'Consolas', monospace" font-size="6" fill="#64748b">INDEXEDDB</text>
+    
+    <line x1="340" y1="50" x2="380" y2="50" stroke="#00d4ff" stroke-width="2"/>
+    <polygon points="375,45 385,50 375,55" fill="#00d4ff"/>
+    
+    <!-- Activate -->
+    <rect x="390" y="30" width="80" height="40" rx="4" fill="#0d1219" stroke="#a855f7" stroke-width="1"/>
+    <text x="430" y="55" text-anchor="middle" font-family="'Consolas', monospace" font-size="7" fill="#a855f7">ACTIVATE</text>
+    <text x="430" y="65" text-anchor="middle" font-family="'Consolas', monospace" font-size="6" fill="#64748b">MODULE</text>
+    
+    <line x1="470" y1="50" x2="510" y2="50" stroke="#a855f7" stroke-width="2"/>
+    <polygon points="505,45 515,50 505,55" fill="#a855f7"/>
+    
+    <!-- Ready -->
+    <circle cx="560" cy="50" r="25" fill="#0d1219" stroke="#22c55e" stroke-width="2" filter="url(#trainGlow)"/>
+    <text x="560" y="55" text-anchor="middle" font-family="'Consolas', monospace" font-size="8" fill="#22c55e">READY</text>
+    
+    <!-- Connect from finish -->
+    <path d="M 640 30 Q 640 50 560 50 Q 480 50 430 50 Q 380 50 340 50" fill="none" stroke="#22c55e" stroke-width="1"/>
+  </g>
+</svg>

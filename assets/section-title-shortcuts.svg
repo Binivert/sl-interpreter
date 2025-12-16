@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 60">
+  <defs>
+    <linearGradient id="titleGrad16" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f97316"/>
+      <stop offset="100%" style="stop-color:#eab308"/>
+    </linearGradient>
+    <linearGradient id="underlineGrad16" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f97316;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#f97316;stop-opacity:0"/>
+    </linearGradient>
+    <filter id="titleGlow16">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <g transform="translate(20, 30)">
+    <rect x="-12" y="-8" width="24" height="16" rx="3" stroke="#f97316" stroke-width="2" fill="none" filter="url(#titleGlow16)"/>
+    <text x="0" y="4" text-anchor="middle" font-family="'Consolas', monospace" font-size="10" fill="#eab308">⌘</text>
+  </g>
+  
+  <text x="50" y="38" font-family="'Segoe UI', Arial, sans-serif" font-size="24" font-weight="700" fill="url(#titleGrad16)" filter="url(#titleGlow16)">KEYBOARD SHORTCUTS</text>
+  
+  <line x1="50" y1="48" x2="300" y2="48" stroke="url(#underlineGrad16)" stroke-width="2" filter="url(#titleGlow16)"/>
+  
+  <circle cx="310" cy="48" r="2" fill="#f97316"/>
+  <circle cx="320" cy="48" r="2" fill="#eab308" opacity="0.7"/>
+  <circle cx="330" cy="48" r="2" fill="#00d4ff" opacity="0.4"/>
+</svg>

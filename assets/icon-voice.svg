@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
+  <style>
+    @keyframes sound { 0%,100%{opacity:0.3} 50%{opacity:1} }
+    .sound1 { animation: sound 1s ease-in-out infinite; }
+    .sound2 { animation: sound 1s ease-in-out 0.3s infinite; }
+  </style>
+  <path d="M3 9 L3 15 L7 15 L12 19 L12 5 L7 9 Z" fill="#00ff88"/>
+  <path d="M15 9 Q18 12 15 15" fill="none" stroke="#00ff88" stroke-width="1.5" class="sound1"/>
+  <path d="M17 7 Q21 12 17 17" fill="none" stroke="#00ff88" stroke-width="1.5" class="sound2"/>
+</svg>

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 60">
+  <defs>
+    <linearGradient id="titleGrad12" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ef4444"/>
+      <stop offset="100%" style="stop-color:#eab308"/>
+    </linearGradient>
+    <linearGradient id="underlineGrad12" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ef4444;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#ef4444;stop-opacity:0"/>
+    </linearGradient>
+    <filter id="titleGlow12">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <g transform="translate(20, 30)">
+    <polygon points="0,-12 12,10 -12,10" stroke="#ef4444" stroke-width="2" fill="none" filter="url(#titleGlow12)"/>
+    <line x1="0" y1="-4" x2="0" y2="2" stroke="#eab308" stroke-width="2"/>
+    <circle cx="0" cy="6" r="2" fill="#eab308"/>
+  </g>
+  
+  <text x="50" y="38" font-family="'Segoe UI', Arial, sans-serif" font-size="24" font-weight="700" fill="url(#titleGrad12)" filter="url(#titleGlow12)">LIMITATIONS</text>
+  
+  <line x1="50" y1="48" x2="200" y2="48" stroke="url(#underlineGrad12)" stroke-width="2" filter="url(#titleGlow12)"/>
+  
+  <circle cx="210" cy="48" r="2" fill="#ef4444"/>
+  <circle cx="220" cy="48" r="2" fill="#eab308" opacity="0.7"/>
+  <circle cx="230" cy="48" r="2" fill="#00d4ff" opacity="0.4"/>
+</svg>

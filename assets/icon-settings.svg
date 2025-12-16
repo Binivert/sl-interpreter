@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
+  <style>
+    @keyframes spin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+    .gear { animation: spin 4s linear infinite; transform-origin: center; }
+  </style>
+  <g class="gear">
+    <circle cx="12" cy="12" r="3" fill="none" stroke="#8892a0" stroke-width="2"/>
+    <path d="M12 2 L12 5 M12 19 L12 22 M2 12 L5 12 M19 12 L22 12 M4.93 4.93 L7.05 7.05 M16.95 16.95 L19.07 19.07 M4.93 19.07 L7.05 16.95 M16.95 7.05 L19.07 4.93" stroke="#8892a0" stroke-width="2" stroke-linecap="round"/>
+  </g>
+</svg>
