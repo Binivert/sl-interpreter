@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 50">
+  <defs>
+    <linearGradient id="circuitGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:0"/>
+      <stop offset="50%" style="stop-color:#00d4ff;stop-opacity:0.6"/>
+      <stop offset="100%" style="stop-color:#00d4ff;stop-opacity:0"/>
+    </linearGradient>
+    <filter id="circuitGlow">
+      <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Circuit pattern -->
+  <g stroke="#1e293b" stroke-width="1" fill="none">
+    <path d="M 100 25 L 250 25 L 270 15 L 350 15"/>
+    <path d="M 100 25 L 250 25 L 270 35 L 350 35"/>
+    <path d="M 450 15 L 530 15 L 550 25 L 700 25"/>
+    <path d="M 450 35 L 530 35 L 550 25 L 700 25"/>
+  </g>
+  
+  <!-- Glowing overlay -->
+  <g stroke="url(#circuitGrad)" stroke-width="1" fill="none" filter="url(#circuitGlow)">
+    <path d="M 100 25 L 250 25 L 270 15 L 350 15"/>
+    <path d="M 100 25 L 250 25 L 270 35 L 350 35"/>
+    <path d="M 450 15 L 530 15 L 550 25 L 700 25"/>
+    <path d="M 450 35 L 530 35 L 550 25 L 700 25"/>
+  </g>
+  
+  <!-- Center element -->
+  <g transform="translate(400, 25)">
+    <rect x="-25" y="-10" width="50" height="20" rx="3" fill="#0d1219" stroke="#00d4ff" stroke-width="1"/>
+    <circle cx="-10" cy="0" r="3" fill="#00d4ff" filter="url(#circuitGlow)"/>
+    <circle cx="10" cy="0" r="3" fill="#a855f7" filter="url(#circuitGlow)"/>
+  </g>
+  
+  <!-- Nodes -->
+  <g fill="#00d4ff">
+    <circle cx="350" cy="15" r="3"/>
+    <circle cx="350" cy="35" r="3"/>
+    <circle cx="450" cy="15" r="3"/>
+    <circle cx="450" cy="35" r="3"/>
+  </g>
+</svg>

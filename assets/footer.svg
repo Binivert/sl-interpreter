@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 80">
+  <defs>
+    <linearGradient id="footerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:0"/>
+      <stop offset="50%" style="stop-color:#a855f7;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#ec4899;stop-opacity:0"/>
+    </linearGradient>
+    <filter id="footerGlow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Top line -->
+  <line x1="50" y1="10" x2="550" y2="10" stroke="url(#footerGrad)" stroke-width="2" filter="url(#footerGlow)"/>
+  
+  <!-- Logo mark -->
+  <g transform="translate(300, 40)">
+    <circle cx="0" cy="0" r="15" stroke="#a855f7" stroke-width="1.5" fill="none" filter="url(#footerGlow)"/>
+    <circle cx="0" cy="0" r="8" stroke="#00d4ff" stroke-width="1" fill="none"/>
+    <circle cx="0" cy="0" r="3" fill="#ec4899"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="300" y="70" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="10" fill="#64748b">SLIS • Sign Language Interpretation System • v2.0.0</text>
+  
+  <!-- Side accents -->
+  <g stroke="#1e293b" stroke-width="1" fill="none">
+    <path d="M 50 30 L 100 30 L 120 40"/>
+    <path d="M 550 30 L 500 30 L 480 40"/>
+  </g>
+  
+  <g fill="#00d4ff" opacity="0.5">
+    <circle cx="120" cy="40" r="2"/>
+    <circle cx="480" cy="40" r="2"/>
+  </g>
+</svg>

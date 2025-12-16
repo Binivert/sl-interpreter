@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 250">
+  <defs>
+    <linearGradient id="flowBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0e17"/>
+      <stop offset="100%" style="stop-color:#0d1219"/>
+    </linearGradient>
+    <filter id="flowGlow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <marker id="arrowCyan" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#00d4ff"/>
+    </marker>
+  </defs>
+  
+  <rect width="900" height="250" fill="url(#flowBg)"/>
+  
+  <text x="450" y="25" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="14" font-weight="700" fill="#22c55e" filter="url(#flowGlow)">DATA FLOW PIPELINE</text>
+  
+  <!-- Pipeline stages -->
+  <g transform="translate(30, 60)">
+    <!-- Stage 1: Camera -->
+    <rect x="0" y="0" width="90" height="60" rx="6" fill="#0d1219" stroke="#00d4ff" stroke-width="2" filter="url(#flowGlow)"/>
+    <text x="45" y="25" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#00d4ff">📷</text>
+    <text x="45" y="42" text-anchor="middle" font-family="'Consolas', monospace" font-size="8" fill="#f1f5f9">CAMERA</text>
+    <text x="45" y="52" text-anchor="middle" font-family="'Consolas', monospace" font-size="6" fill="#64748b">INPUT</text>
+    
+    <!-- Arrow -->
+    <line x1="95" y1="30" x2="125" y2="30" stroke="#00d4ff" stroke-width="2" marker-end="url(#arrowCyan)"/>
+    
+    <!-- Stage 2: Video Frame -->
+    <rect x="130" y="0" width="90" height="60" rx="6" fill="#0d1219" stroke="#a855f7" stroke-width="2"/>
+    <text x="175" y="25" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#a855f7">🖼️</text>
+    <text x="175" y="42" text-anchor="middle" font-family="'Consolas', monospace" font-size="8" fill="#f1f5f9">VIDEO</text>
+    <text x="175" y="52" text-anchor="middle" font-family="'Consolas', monospace" font-size="6" fill="#64748b">FRAME</text>
+    
+    <line x1="225" y1="30" x2="255" y2="30" stroke="#a855f7" stroke-width="2" marker-end="url(#arrowCyan)"/>
+    
+    <!-- Stage 3: MediaPipe -->
+    <rect x="260" y="0" width="90" height="60" rx="6" fill="#0d1219" stroke="#ec4899" stroke-width="2"/>
+    <text x="305" y="25" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#ec4899">🤖</text>
+    <text x="305" y="42" text-anchor="middle" font-family="'Consolas', monospace" font-size="8" fill="#f1f5f9">MEDIAPIPE</text>
+    <text x="305" y="52" text-anchor="middle" font-family="'Consolas', monospace" font-size="6" fill="#64748b">DETECT</text>
+    
+    <line x1="355" y1="30" x2="385" y2="30" stroke="#ec4899" stroke-width="2" marker-end="url(#arrowCyan)"/>
+    
+    <!-- Stage 4: Feature Extract -->
+    <rect x="390" y="0" width="90" height="60" rx="6" fill="#0d1219" stroke="#22c55e" stroke-width="2"/>
+    <text x="435" y="25" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#22c55e">📊</text>
+    <text x="435" y="42" text-anchor="middle" font-family="'Consolas', monospace" font-size="8" fill="#f1f5f9">FEATURE</text>
+    <text x="435" y="52" text-anchor="middle" font-family="'Consolas', monospace" font-size="6" fill="#64748b">EXTRACT</text>
+    
+    <line x1="485" y1="30" x2="515" y2="30" stroke="#22c55e" stroke-width="2" marker-end="url(#arrowCyan)"/>
+    
+    <!-- Stage 5: Classifier -->
+    <rect x="520" y="0" width="90" height="60" rx="6" fill="#0d1219" stroke="#eab308" stroke-width="2"/>
+    <text x="565" y="25" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#eab308">🧠</text>
+    <text x="565" y="42" text-anchor="middle" font-family="'Consolas', monospace" font-size="8" fill="#f1f5f9">CLASSIFY</text>
+    <text x="565" y="52" text-anchor="middle" font-family="'Consolas', monospace" font-size="6" fill="#64748b">ENGINE</text>
+    
+    <line x1="615" y1="30" x2="645" y2="30" stroke="#eab308" stroke-width="2" marker-end="url(#arrowCyan)"/>
+    
+    <!-- Stage 6: Threshold -->
+    <rect x="650" y="0" width="90" height="60" rx="6" fill="#0d1219" stroke="#f97316" stroke-width="2"/>
+    <text x="695" y="25" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#f97316">⚖️</text>
+    <text x="695" y="42" text-anchor="middle" font-family="'Consolas', monospace" font-size="8" fill="#f1f5f9">THRESHOLD</text>
+    <text x="695" y="52" text-anchor="middle" font-family="'Consolas', monospace" font-size="6" fill="#64748b">CHECK</text>
+    
+    <line x1="745" y1="30" x2="775" y2="30" stroke="#f97316" stroke-width="2" marker-end="url(#arrowCyan)"/>
+    
+    <!-- Stage 7: Output -->
+    <rect x="780" y="0" width="90" height="60" rx="6" fill="#0d1219" stroke="#00d4ff" stroke-width="2" filter="url(#flowGlow)"/>
+    <text x="825" y="25" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#00d4ff">🔊</text>
+    <text x="825" y="42" text-anchor="middle" font-family="'Consolas', monospace" font-size="8" fill="#f1f5f9">OUTPUT</text>
+    <text x="825" y="52" text-anchor="middle" font-family="'Consolas', monospace" font-size="6" fill="#64748b">TTS/UI</text>
+  </g>
+  
+  <!-- Data labels below -->
+  <g transform="translate(30, 140)">
+    <text x="45" y="0" text-anchor="middle" font-family="'Consolas', monospace" font-size="7" fill="#64748b">MediaStream</text>
+    <text x="175" y="0" text-anchor="middle" font-family="'Consolas', monospace" font-size="7" fill="#64748b">RGB Pixels</text>
+    <text x="305" y="0" text-anchor="middle" font-family="'Consolas', monospace" font-size="7" fill="#64748b">21 Points</text>
+    <text x="435" y="0" text-anchor="middle" font-family="'Consolas', monospace" font-size="7" fill="#64748b">166D Vector</text>
+    <text x="565" y="0" text-anchor="middle" font-family="'Consolas', monospace" font-size="7" fill="#64748b">Label+Score</text>
+    <text x="695" y="0" text-anchor="middle" font-family="'Consolas', monospace" font-size="7" fill="#64748b">Filtered</text>
+    <text x="825" y="0" text-anchor="middle" font-family="'Consolas', monospace" font-size="7" fill="#64748b">Speech/UI</text>
+  </g>
+  
+  <!-- Latency indicator -->
+  <g transform="translate(30, 180)">
+    <rect x="0" y="0" width="840" height="30" rx="4" fill="#111827" stroke="#1e293b" stroke-width="1"/>
+    <text x="420" y="12" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="9" fill="#64748b">TOTAL LATENCY: ~30-50ms (GPU) | ~80-150ms (CPU)</text>
+    <rect x="10" y="18" width="820" height="6" rx="3" fill="#0d1219"/>
+    <rect x="10" y="18" width="200" height="6" rx="3" fill="#00d4ff" opacity="0.8"/>
+    <rect x="210" y="18" width="150" height="6" rx="3" fill="#a855f7" opacity="0.8"/>
+    <rect x="360" y="18" width="250" height="6" rx="3" fill="#ec4899" opacity="0.8"/>
+    <rect x="610" y="18" width="100" height="6" rx="3" fill="#22c55e" opacity="0.8"/>
+    <rect x="710" y="18" width="80" height="6" rx="3" fill="#eab308" opacity="0.8"/>
+    <rect x="790" y="18" width="40" height="6" rx="3" fill="#f97316" opacity="0.8"/>
+  </g>
+</svg>
