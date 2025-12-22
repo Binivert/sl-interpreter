@@ -12,7 +12,7 @@ Transform hand gestures into text and speech directly in your browser — no ser
 
 </div>
 <p align="center">
-  <img src="assets/demo.png" alt="demo" />
+  <img src="assets/Demo.png" alt="demo" />
 </p>
 
 
