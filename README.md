@@ -11,6 +11,10 @@ Transform hand gestures into text and speech directly in your browser — no ser
 [![Platform](https://img.shields.io/badge/platform-browser-a855f7?style=for-the-badge&labelColor=0a0f1a)]()
 
 </div>
+<p align="center">
+  <img src="assets/demo.png" alt="demo" />
+</p>
+
 
 ---
 
